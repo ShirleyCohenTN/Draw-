@@ -11,7 +11,7 @@ Several friends can draw together and complete each other's drawings.
 Express your creativity in a fun way.
 
 As a teacher you can use this website for a better explanation and teaching.
-Just like a teacher who uses a whiteboard in class to add examples, write points, and create sketches, using this website will allow the students to join the teacher in the lesson activity and add/ write/ draw his own ideas.
+Just like a teacher who uses a whiteboard in class to add examples, write points, and create sketches, using this website will allow the students to join the teacher in the lesson activity and add/ write/ draw their own ideas and suggestions.
 
 
 User stories:
