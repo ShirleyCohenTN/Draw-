@@ -19,4 +19,3 @@ User stories:
 1. As a random user I want to draw some drawings so that I can have fun with my friends.
 2. As a teacher I want to allow my students to draw on my whiteboard so that they can participate in my lesson.
 3. As an artist I want to be able to draw and share my art, so that people can see my art.
-4.
