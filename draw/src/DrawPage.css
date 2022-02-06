@@ -1,0 +1,57 @@
+@import url(
+'https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+  
+.App {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-image: linear-gradient(
+    120deg, #f573f5 0%, #f8f411 100%);
+}
+  
+h1 {
+  font-family: 'Assistant', cursive;
+  font-size: 50px;
+  color: whitesmoke
+  
+}
+  
+.draw-area {
+  width: 1200px;
+  height: 720px;
+  border: 2px solid #a736f3;
+  position: relative;
+  background-color: white;
+}
+  
+.Menu {
+  width: 700px;
+  height: 50px;
+  display: flex;
+  justify-content: space-evenly;
+  border-radius: 1px;
+  align-items: center;
+  background-color: #2f3ce92d;
+  margin: auto;
+  margin-top: 10px;
+  font-family: "arial";
+  font-weight: bolder;
+  
+
+
+}
+
+.Menu button{
+    border-radius: 80px;
+    background-color: rgb(20, 158, 27);
+    font-weight: bold;
+    cursor: pointer;
+    color:whitesmoke
+    
+}
+
+
+
