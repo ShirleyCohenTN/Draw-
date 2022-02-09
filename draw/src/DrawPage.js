@@ -2,7 +2,6 @@ import React from "react";
 import { useEffect, useRef, useState, useContext } from "react";
 import Menu from "./Menu";
 import "./DrawPage.css";
-
 import { SocketContext } from "./socket";
 
 function DrawPage() {
