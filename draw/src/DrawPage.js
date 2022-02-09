@@ -62,13 +62,6 @@ function DrawPage() {
     socket.emit("send-start", drawXY);
   };
 
-  // Function for ending the drawing
-  const endDrawing = () => {
-    ctxRef.current.closePath();
-    setIsDrawing(false);
-    socket.emit("send-end");
-  };
-
   const draw = (e) => {
     if (!isDrawing) {
       return;
@@ -79,8 +72,11 @@ function DrawPage() {
     ctxRef.current.stroke();
   };
 
-  const t = () => {
-    console.log("yaaaaaaaa");
+  // Function for ending the drawing
+  const endDrawing = () => {
+    ctxRef.current.closePath();
+    setIsDrawing(false);
+    socket.emit("send-end");
   };
 
   return (
