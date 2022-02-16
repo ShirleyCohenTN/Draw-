@@ -5,10 +5,17 @@ const io = require("socket.io")(3030, {
 });
 
 io.on("connection", (socket) => {
-  console.log(socket.id);
+  console.log(socket.id, ": connection");
   socket.on("send-draw", (drawXY) => {
     io.emit("receive-draw", drawXY, socket.id);
-    console.log(socket.id, ": DRAW");
+    console.log(
+      socket.id,
+      ": DRAW (color: {",
+      drawXY.Color,
+      ", ",
+      drawXY.Width,
+      "}"
+    );
   });
 
   socket.on("send-start", (drawXY) => {
@@ -18,7 +25,7 @@ io.on("connection", (socket) => {
 
   socket.on("send-end", () => {
     io.emit("receive-end");
-    console.log(socket.id, ": END");
+    console.log(socket.id, ": END ");
   });
 
   //

@@ -36,11 +36,14 @@ function DrawPage() {
     socket.on("receive-draw", (drawXY, senderID) => {
       console.log("draw:", drawXY, senderID);
       let drawFrom = senders[senderID];
+      ctxRef.current.strokeStyle = drawFrom.Color;
+      ctxRef.current.lineWidth = drawFrom.Width;
       ctxRef.current.beginPath();
       ctxRef.current.moveTo(drawFrom.X, drawFrom.Y);
       ctxRef.current.lineTo(drawXY.X, drawXY.Y);
       ctxRef.current.stroke();
       ctxRef.current.closePath();
+      //setLineColor(prevVal);
       console.log(drawXY.X, drawXY.Y);
       senders[senderID] = drawXY;
     });
@@ -49,8 +52,6 @@ function DrawPage() {
       console.log("start", drawXY, senderID);
       senders[senderID] = drawXY;
 
-      //ctxRef.current.beginPath();
-      //ctxRef.current.moveTo(drawXY.X, drawXY.Y);
       setIsDrawing(true);
     });
 
@@ -68,7 +69,13 @@ function DrawPage() {
     // ctxRef.current.beginPath();
     // ctxRef.current.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     setIsDrawing(true);
-    let drawXY = { X: e.nativeEvent.offsetX, Y: e.nativeEvent.offsetY };
+    let drawXY = {
+      X: e.nativeEvent.offsetX,
+      Y: e.nativeEvent.offsetY,
+      Color: lineColor,
+      Width: lineWidth,
+    };
+
     socket.emit("send-start", drawXY);
   };
 
@@ -77,7 +84,12 @@ function DrawPage() {
       return;
     }
     //ctxRef.current.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
-    let drawXY = { X: e.nativeEvent.offsetX, Y: e.nativeEvent.offsetY };
+    let drawXY = {
+      X: e.nativeEvent.offsetX,
+      Y: e.nativeEvent.offsetY,
+      Color: lineColor,
+      Width: lineWidth,
+    };
     socket.emit("send-draw", drawXY);
     ctxRef.current.stroke();
   };
