@@ -3,8 +3,29 @@ import "./DrawPage.css";
 
 
 const Menu = ({ setLineColor, setLineWidth, 
-    setLineOpacity }) => {
+    setLineOpacity, cvs }) => {
 
+
+
+      const clearCanvas = () => {
+        var context = cvs.getContext('2d');
+        context.clearRect(0, 0, cvs.width, cvs.height);
+    }
+
+
+    //doesnt work
+
+    const downloadCanvas = () => {
+      var canvas = document.getElementById("canvas");
+      canvas.fillStyle="blue";
+      var url = canvas.toDataURL("image/png");
+      var link = document.createElement('a');
+      link.download = 'MyCanvasDrawing.png';
+      link.href = url;
+      link.click();
+      
+    }
+      
 
 
       return (
@@ -25,10 +46,10 @@ const Menu = ({ setLineColor, setLineWidth,
               setLineWidth(e.target.value);
             }}
           />
-          <button >
+          <button onClick={clearCanvas}>
               Clear Canvas
           </button>
-          <button >
+          <button onClick={downloadCanvas}>
               Save Image
           </button>
           <button>

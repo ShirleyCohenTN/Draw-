@@ -15,6 +15,7 @@ function DrawPage() {
   const [lineColor, setLineColor] = useState("black");
   //const [lineOpacity, setLineOpacity] = useState(0.1);
 
+  
   // Initialization when the component
   // mounts for the first time
   useEffect(() => {
@@ -26,6 +27,11 @@ function DrawPage() {
     ctx.strokeStyle = lineColor;
     ctx.lineWidth = lineWidth;
     ctxRef.current = ctx;
+ 
+    //added white background to the canvas, so when we download the canvas image it will not be transparent
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0,0,canvas.width, canvas.height);
+
     let senders = {};
     //
     //socket logic start
@@ -97,13 +103,17 @@ function DrawPage() {
           setLineColor={setLineColor}
           setLineWidth={setLineWidth}
           //setLineOpacity={setLineOpacity}
+
+          //sending the object to be able to clear the canvas
+          cvs = {canvasRef.current}
         />
-        <canvas
+        <canvas id="canvas"
+  
           onMouseDown={startDrawing}
           onMouseUp={endDrawing}
           onMouseMove={draw}
           ref={canvasRef}
-          width={`1280px`}
+          width={`1200px`}
           height={`620px`}
         />
       </div>
