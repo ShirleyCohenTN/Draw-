@@ -7,14 +7,19 @@ const io = require("socket.io")(3030, {
 io.on("connection", (socket) => {
   console.log(socket.id, ": connection");
   socket.on("send-draw", (drawXY) => {
-    io.emit("receive-draw", drawXY, socket.id);
+    if (drawXY.canvasID)
+      io.to(drawXY.canvasID).emit("receive-draw", drawXY, socket.id);
+    else io.to(socket.id).emit("receive-draw", drawXY, socket.id);
     console.log(
       socket.id,
-      ": DRAW (color: {",
+      ": DRAW (brush: {",
       drawXY.Color,
       ", ",
       drawXY.Width,
-      "}"
+      "}) ",
+      "(to CanvasID: ",
+      drawXY.canvasID,
+      ")"
     );
   });
 
@@ -34,7 +39,22 @@ io.on("connection", (socket) => {
   // });
 
   socket.on("send-chat", (text) => {
-    //console.log(text);
     io.emit("receive-chat", socket.id, text);
+  });
+
+  socket.on("join-room", (roomID) => {
+    socket.join(roomID);
+    console.log(
+      socket.id,
+      " joined room: " + (roomID == "null" ? "self" : roomID)
+    );
+  });
+
+  socket.on("leave-room", (roomID) => {
+    socket.leave(roomID);
+    console.log(
+      socket.id,
+      " left room: " + (roomID == "null" ? "self" : roomID)
+    );
   });
 });

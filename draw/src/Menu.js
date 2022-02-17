@@ -1,7 +1,17 @@
 import React from "react";
 import "./DrawPage.css";
+import CanvasID from "./share/CanvasID";
+import JoinCanvas from "./share/JoinCanvas";
 
-const Menu = ({ setLineColor, setLineWidth, setLineOpacity }) => {
+const Menu = ({
+  setLineColor,
+  setLineWidth,
+  setLineOpacity,
+  ID,
+  generatePublicCanvasID,
+  turnCanvasPrivate,
+  joinFriendsCanvas,
+}) => {
   return (
     <div className="Menu">
       <label>Brush Color </label>
@@ -23,6 +33,13 @@ const Menu = ({ setLineColor, setLineWidth, setLineOpacity }) => {
       <button>Clear Canvas</button>
       <button>Save Image</button>
       <button>Invite a Friend</button>
+
+      <CanvasID
+        generatePublicCanvasID={generatePublicCanvasID}
+        turnCanvasPrivate={turnCanvasPrivate}
+        ID={ID}
+      />
+      <JoinCanvas joinFriendsCanvas={joinFriendsCanvas} />
     </div>
   );
 };

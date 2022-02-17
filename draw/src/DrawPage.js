@@ -3,7 +3,6 @@ import { useEffect, useRef, useState, useContext } from "react";
 import Menu from "./Menu";
 import "./DrawPage.css";
 import { SocketContext } from "./socket";
-import ChatWrite from "./chat/ChatWrite";
 import ChatBox from "./chat/Chat";
 
 function DrawPage() {
@@ -13,6 +12,7 @@ function DrawPage() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [lineWidth, setLineWidth] = useState(5);
   const [lineColor, setLineColor] = useState("black");
+  const [canvasID, setCanvasID] = useState(null);
   //const [lineOpacity, setLineOpacity] = useState(0.1);
 
   // Initialization when the component
@@ -56,7 +56,6 @@ function DrawPage() {
     });
 
     socket.on("receive-end", () => {
-      //ctxRef.current.closePath();
       setIsDrawing(false);
       console.log("END");
     });
@@ -66,14 +65,13 @@ function DrawPage() {
 
   // Function for starting the drawing
   const startDrawing = (e) => {
-    // ctxRef.current.beginPath();
-    // ctxRef.current.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     setIsDrawing(true);
     let drawXY = {
       X: e.nativeEvent.offsetX,
       Y: e.nativeEvent.offsetY,
       Color: lineColor,
       Width: lineWidth,
+      canvasID: canvasID,
     };
 
     socket.emit("send-start", drawXY);
@@ -83,12 +81,12 @@ function DrawPage() {
     if (!isDrawing) {
       return;
     }
-    //ctxRef.current.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     let drawXY = {
       X: e.nativeEvent.offsetX,
       Y: e.nativeEvent.offsetY,
       Color: lineColor,
       Width: lineWidth,
+      canvasID: canvasID,
     };
     socket.emit("send-draw", drawXY);
     ctxRef.current.stroke();
@@ -101,6 +99,26 @@ function DrawPage() {
     socket.emit("send-end");
   };
 
+  const generatePublicCanvasID = () => {
+    let cID = "" + socket.id;
+    cID = cID.slice(cID.length - 4) + Math.floor(Math.random() * 100);
+    socket.emit("leave-room", canvasID);
+    setCanvasID(cID);
+    socket.emit("join-room", cID);
+  };
+
+  const turnCanvasPrivate = () => {
+    socket.emit("leave-room", canvasID);
+    setCanvasID(null);
+    socket.emit("join-room", socket.id);
+  };
+
+  const joinFriendsCanvas = (ID) => {
+    socket.emit("leave-room", canvasID);
+    setCanvasID(ID);
+    socket.emit("join-room", ID);
+  };
+
   return (
     <div className="App">
       <h1>Draw!</h1>
@@ -108,7 +126,10 @@ function DrawPage() {
         <Menu
           setLineColor={setLineColor}
           setLineWidth={setLineWidth}
-          //setLineOpacity={setLineOpacity}
+          ID={canvasID}
+          generatePublicCanvasID={generatePublicCanvasID}
+          turnCanvasPrivate={turnCanvasPrivate}
+          joinFriendsCanvas={joinFriendsCanvas}
         />
         <canvas
           onMouseDown={startDrawing}
