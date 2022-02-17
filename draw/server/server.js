@@ -5,10 +5,22 @@ const io = require("socket.io")(3030, {
 });
 
 io.on("connection", (socket) => {
-  console.log(socket.id);
+  console.log(socket.id, ": connection");
   socket.on("send-draw", (drawXY) => {
-    io.emit("receive-draw", drawXY, socket.id);
-    console.log(socket.id, ": DRAW");
+    if (drawXY.canvasID)
+      io.to(drawXY.canvasID).emit("receive-draw", drawXY, socket.id);
+    else io.to(socket.id).emit("receive-draw", drawXY, socket.id);
+    console.log(
+      socket.id,
+      ": DRAW (brush: {",
+      drawXY.Color,
+      ", ",
+      drawXY.Width,
+      "}) ",
+      "(to CanvasID: ",
+      drawXY.canvasID,
+      ")"
+    );
   });
 
   socket.on("send-start", (drawXY) => {
@@ -18,7 +30,7 @@ io.on("connection", (socket) => {
 
   socket.on("send-end", () => {
     io.emit("receive-end");
-    console.log(socket.id, ": END");
+    console.log(socket.id, ": END ");
   });
 
   //
@@ -27,7 +39,22 @@ io.on("connection", (socket) => {
   // });
 
   socket.on("send-chat", (text) => {
-    //console.log(text);
     io.emit("receive-chat", socket.id, text);
+  });
+
+  socket.on("join-room", (roomID) => {
+    socket.join(roomID);
+    console.log(
+      socket.id,
+      " joined room: " + (roomID == "null" ? "self" : roomID)
+    );
+  });
+
+  socket.on("leave-room", (roomID) => {
+    socket.leave(roomID);
+    console.log(
+      socket.id,
+      " left room: " + (roomID == "null" ? "self" : roomID)
+    );
   });
 });

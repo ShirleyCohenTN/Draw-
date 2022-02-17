@@ -3,7 +3,6 @@ import { useEffect, useRef, useState, useContext } from "react";
 import Menu from "./Menu";
 import "./DrawPage.css";
 import { SocketContext } from "./socket";
-import ChatWrite from "./chat/ChatWrite";
 import ChatBox from "./chat/Chat";
 
 function DrawPage() {
@@ -13,6 +12,7 @@ function DrawPage() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [lineWidth, setLineWidth] = useState(5);
   const [lineColor, setLineColor] = useState("black");
+  const [canvasID, setCanvasID] = useState(null);
   //const [lineOpacity, setLineOpacity] = useState(0.1);
 
   
@@ -42,11 +42,14 @@ function DrawPage() {
     socket.on("receive-draw", (drawXY, senderID) => {
       console.log("draw:", drawXY, senderID);
       let drawFrom = senders[senderID];
+      ctxRef.current.strokeStyle = drawFrom.Color;
+      ctxRef.current.lineWidth = drawFrom.Width;
       ctxRef.current.beginPath();
       ctxRef.current.moveTo(drawFrom.X, drawFrom.Y);
       ctxRef.current.lineTo(drawXY.X, drawXY.Y);
       ctxRef.current.stroke();
       ctxRef.current.closePath();
+      //setLineColor(prevVal);
       console.log(drawXY.X, drawXY.Y);
       senders[senderID] = drawXY;
     });
@@ -55,13 +58,10 @@ function DrawPage() {
       console.log("start", drawXY, senderID);
       senders[senderID] = drawXY;
 
-      //ctxRef.current.beginPath();
-      //ctxRef.current.moveTo(drawXY.X, drawXY.Y);
       setIsDrawing(true);
     });
 
     socket.on("receive-end", () => {
-      //ctxRef.current.closePath();
       setIsDrawing(false);
       console.log("END");
     });
@@ -71,10 +71,15 @@ function DrawPage() {
 
   // Function for starting the drawing
   const startDrawing = (e) => {
-    // ctxRef.current.beginPath();
-    // ctxRef.current.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     setIsDrawing(true);
-    let drawXY = { X: e.nativeEvent.offsetX, Y: e.nativeEvent.offsetY };
+    let drawXY = {
+      X: e.nativeEvent.offsetX,
+      Y: e.nativeEvent.offsetY,
+      Color: lineColor,
+      Width: lineWidth,
+      canvasID: canvasID,
+    };
+
     socket.emit("send-start", drawXY);
   };
 
@@ -82,8 +87,13 @@ function DrawPage() {
     if (!isDrawing) {
       return;
     }
-    //ctxRef.current.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
-    let drawXY = { X: e.nativeEvent.offsetX, Y: e.nativeEvent.offsetY };
+    let drawXY = {
+      X: e.nativeEvent.offsetX,
+      Y: e.nativeEvent.offsetY,
+      Color: lineColor,
+      Width: lineWidth,
+      canvasID: canvasID,
+    };
     socket.emit("send-draw", drawXY);
     ctxRef.current.stroke();
   };
@@ -93,6 +103,26 @@ function DrawPage() {
     ctxRef.current.closePath();
     setIsDrawing(false);
     socket.emit("send-end");
+  };
+
+  const generatePublicCanvasID = () => {
+    let cID = "" + socket.id;
+    cID = cID.slice(cID.length - 4) + Math.floor(Math.random() * 100);
+    socket.emit("leave-room", canvasID);
+    setCanvasID(cID);
+    socket.emit("join-room", cID);
+  };
+
+  const turnCanvasPrivate = () => {
+    socket.emit("leave-room", canvasID);
+    setCanvasID(null);
+    socket.emit("join-room", socket.id);
+  };
+
+  const joinFriendsCanvas = (ID) => {
+    socket.emit("leave-room", canvasID);
+    setCanvasID(ID);
+    socket.emit("join-room", ID);
   };
 
   return (
@@ -106,6 +136,10 @@ function DrawPage() {
 
           //sending the object to be able to clear the canvas
           cvs = {canvasRef.current}
+          ID={canvasID}
+          generatePublicCanvasID={generatePublicCanvasID}
+          turnCanvasPrivate={turnCanvasPrivate}
+          joinFriendsCanvas={joinFriendsCanvas}
         />
         <canvas id="canvas"
   
