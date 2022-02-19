@@ -1,9 +1,9 @@
 import React from "react";
 import { useEffect, useRef, useState, useContext } from "react";
+import ChatBox from "../../chat/ChatBox";
+import { SocketContext } from "../../helpingComponents/socket";
+import './css/DrawPage.css'
 import Menu from "./Menu";
-import "./DrawPage.css";
-import { SocketContext } from "./socket";
-import ChatBox from "./chat/Chat";
 
 function DrawPage() {
   const socket = useContext(SocketContext);

@@ -1,7 +1,7 @@
 import React from "react";
-import "./DrawPage.css";
-import CanvasID from "./share/CanvasID";
-import JoinCanvas from "./share/JoinCanvas";
+import CanvasID from "../../share/CanvasID";
+import JoinCanvas from "../../share/JoinCanvas";
+import "./css/DrawPage.css";
 
 const Menu = ({
   setLineColor,

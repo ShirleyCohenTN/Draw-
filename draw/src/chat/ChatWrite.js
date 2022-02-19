@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useRef, useState, useContext } from "react";
-import { SocketContext } from "../socket";
+import { SocketContext } from "../helpingComponents/socket";
+
 
 function ChatWrite() {
   const socket = useContext(SocketContext);

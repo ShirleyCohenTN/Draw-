@@ -1,7 +1,8 @@
 import { render } from "@testing-library/react";
 import React from "react";
 import { useEffect, useRef, useState, useContext } from "react";
-import { socket, SocketContext } from "../socket";
+import { socket } from "../helpingComponents/socket";
+
 
 class ChatView extends React.Component {
   constructor(props) {

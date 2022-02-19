@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import "./login.css";
+import "./css/login.css";
 import { FaUserAlt } from "react-icons/fa";
 import { Link} from "react-router-dom";
 
-import background from "./images/bfsyJ1.jpg";
 
 var url = "http://localhost:50434/api/users";
 //var navigate = useNavigate();

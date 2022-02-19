@@ -1,9 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import DrawPage from "./DrawPage";
-import Login from "./Login";
-import SignUp from "./SignUp";
-import { SocketContext, socket } from "./socket";
+import { socket, SocketContext } from "./helpingComponents/socket";
+import Login from "./pages/authentication/Login";
+import SignUp from "./pages/authentication/SignUp";
+import DrawPage from "./pages/canvas/DrawPage";
+
 
 function App() {
   return (
