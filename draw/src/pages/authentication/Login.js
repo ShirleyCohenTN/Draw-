@@ -1,72 +1,49 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./css/login.css";
 import { FaUserAlt } from "react-icons/fa";
 import { Link} from "react-router-dom";
 
-
 var url = "http://localhost:50434/api/users";
-//var navigate = useNavigate();
 
-//לשאול את דרור למה יש לי שגיאה של failed to fetch
+//THE USER_ID is null for some reason
 
-export default class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      EmailValue: "shilychanxd@hotmail.com",
-      PasswordValue: "12345",
-      user_id: "",
-
-      showErrLbl: false,
-    };
-    console.log(this.state.EmailValue);
-  }
+export default function Login() {
+  const [Email, setEmail] = useState(null);
+  // const [FirstName, setFirstName] = useState(null);
+  // const [LastName, setLastName] = useState(null);
+  const [UserID, setUserID] = useState(null);
+  const [Password, setPassword] = useState(0);
+  const navigate = useNavigate();
 
 
-  
-  EmailChange = (e) => {
-    this.setState({ EmailValue: e.target.value }, () =>
-      console.log(this.state.EmailValue)
-    );
-  };
-
-  PasswordChange = (e) => {
-    this.setState({ PasswordValue: e.target.value });
-  };
-
-  btnLogin = async () => {
+  const btnLogin = async () => {
     console.log(1);
 
-    console.log(this.state.EmailValue + "," + this.state.PasswordValue);
+    console.log(Email + "," + Password);
 
-    let s = await this.checkUserDetails(
-      this.state.EmailValue,
-      this.state.PasswordValue
+    let s = await checkUserDetails(
+      Email,
+      Password
     );
     console.log("returned value=" + s);
 
-    if (s != null) {
-      this.setState({ user_id: s.user_id });
-      console.log("user_id is =" + this.state.user_id);
-      this.setState({ showErrLbl: false }, () => {
-        this.props.history.push({
-          pathname: "/DrawPage/",
-          state: { UserObj: s }
-        });
-      });
-      // Alert.alert("התחברת בהצלחה!");
+    if (s != null) 
+    {
+      setUserID({ UserID: s.User_ID });
+      console.log("user_id is =" + UserID);
+      alert("התחברת בהצלחה!");
+      navigate('/')
+
       console.log("h1");
-      // console.log("add to localStorage")
-      // await localStorage.setItem('user_id', JSON.stringify(this.state.user_id))
+     
     } else {
       console.log("err login!");
-      this.setState({ showErrLbl: true });
       alert("שגיאת התחברות");
     }
   };
 
-  checkUserDetails = async (Email, Password) => {
-    // let returnedObj = null;
+  const checkUserDetails = async (Email, Password) => {
     console.log("we are in func checkUserDetails, email = " + Email);
 
     try {
@@ -88,44 +65,25 @@ export default class Login extends Component {
     } catch (e) {
       console.log("Error Login", e);
       alert("lo mevin");
-      // alert(e);
     }
 
-    //  // Call the fetch function passing the url of the API as a parameter
-    //   .then((resp) => resp.json()) // Transform the data into json
-    //   .then(function (data) {
-    //     console.log("meow");
-    //     console.log(data);
-    //     if (data != null) {
-    //       console.log(data.Email);
-    //       console.log(data.Password);
-    //       returnedObj = data;
-    //     } else {
-    //       console.log("wrong email or password!");
-    //       returnedObj = null;
-    //     }
-    //   })
-    //   .catch(function (err) {
-    //     console.log(err);
-    //     alert(err);
-
-    //   });
-
-    // return returnedObj;
   };
 
-  render() {
-    return (
-      <div className="background-image">
-        <form className="login-form">
+
+
+
+
+  return (
+<div className="background-image">
+        <div className="login-form">
           <h2>Log In &#128523; </h2>
           <p>Please login to start drawing! &#128513; </p>
 
           <label className="full-width-input">
             Email <FaUserAlt />
             <input
-              value={this.state.EmailValue}
-              onChange={this.EmailChange}
+              // value={this.state.EmailValue}
+              onChange={(e) => setEmail(e.target.value)}
               type="text"
               placeholder="Email"
             />
@@ -134,8 +92,8 @@ export default class Login extends Component {
           <label className="full-width-input">
             Password
             <input
-              value={this.state.PasswordValue}
-              onChange={this.PasswordChange}
+              // value={this.state.PasswordValue}
+              onChange={(e) => setPassword(e.target.value)}
               type="password"
               placeholder="Password"
             />
@@ -144,7 +102,7 @@ export default class Login extends Component {
           <button
             type="button"
             className="button-LoginSign"
-            onClick={this.btnLogin}
+            onClick={btnLogin}
           >
             Login
           </button>
@@ -155,8 +113,7 @@ export default class Login extends Component {
               register
             </Link>
           </div>
-        </form>
+        </div>
       </div>
-    );
-  }
+  );
 }

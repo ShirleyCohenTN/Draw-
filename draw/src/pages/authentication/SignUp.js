@@ -1,82 +1,56 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "./css/login.css";
+import { FaUserAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+
 
 
 var url = "http://localhost:50434/api/users";
 
-//לשאול את דרור למה יש לי שגיאה של failed to fetch
+//אני עדיין מקבלת שגיאת 400 בעת הרשמה אבל זה כן נרשם לי
+
+export default function SignUp() {
+  const [Email, setEmail] = useState(null);
+  const [FirstName, setFirstName] = useState(null);
+  const [LastName, setLastName] = useState(null);
+  const [UserID, setUserID] = useState(0);
+  const [Password, setPassword] = useState(null);
+  const navigate = useNavigate();
 
 
-export default class SignUp extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      user_id: "",
-      FirstName: "",
-      LastName: "",
-      EmailValue: "",
-      PasswordValue: "",
-    };
-    console.log(this.state.EmailValue);
-  }
-
-  FirstNameChange = (e) => {
-    this.setState({ FirstName: e.target.value });
-  };
-
-  LastNameChange = (e) => {
-    this.setState({ LastName: e.target.value });
-  };
-
-  EmailChange = (e) => {
-    this.setState({ EmailValue: e.target.value }, () =>
-      console.log(this.state.EmailValue)
-    );
-  };
-
-  PasswordChange = (e) => {
-    this.setState({ PasswordValue: e.target.value });
-  };
-
-  btnSignUp = async () => {
-    let s = await this.AddUser(
-      this.state.FirstName,
-      this.state.LastName,
-      this.state.EmailValue,
-      this.state.PasswordValue
+  const btnSignUp = async () => {
+    let s = await AddUser(
+      FirstName,
+      LastName,
+      Email,
+      Password
     );
     console.log("returned value=" + s);
 
-    this.setState({ user_id: s.user_id });
+    setUserID({ UserID: s.User_ID });
 
-    console.log("user_id is =" + this.state.user_id);
+    console.log("user_id is =" + UserID);
 
     if (s == null) {
       alert("didnt insert into db!");
     } else {
       alert("נרשמת בהצלחה!");
 
-      await this.setState(
-        { fullname: `${this.state.FirstName} ${this.state.LastName}` },
-        () => {
-          this.props.history.push({
-            pathname: "/DrawPage/",
-            state: { UserObj: s}
-          });
-        }
-      );
+      navigate('/', {state: {fullname: `${FirstName} ${LastName}`}})
+
     }
   };
 
-  AddUser = async (FirstName, LastName, EmailValue, PasswordValue) => {
+  const AddUser = async (FirstName, LastName, Email, Password) => {
     let returnedObj = null;
 
     let obj2Send = {
       First_Name: FirstName,
       Last_Name: LastName,
-      Email: EmailValue,
-      Pass: PasswordValue
+      Email: Email,
+      Pass: Password
     };
 
     await fetch(url, {
@@ -106,64 +80,66 @@ export default class SignUp extends Component {
     return returnedObj;
   };
 
-  render() {
-    return (
-      <div className="background-image">
-        <form onSubmit={this.signIn} className="login-form">
-          <h2>Sign Up &#128523; </h2>
-          <div className="signup-style">
-            <label className="signup-style">
-              First name
-              <input
-                onChange={this.FirstNameChange}
-                type="text"
-                placeholder="First name"
-              />
-            </label>
-          </div>
 
-          <div className="signup-style">
-            <label className="signup-style">
-              Last name
-              <input
-                onChange={this.LastNameChange}
-                type="text"
-                placeholder="Last name"
-              />
-            </label>
-          </div>
 
-          <div className="signup-style">
-            <label className="signup-style">
-              Email address
-              <input
-                onChange={this.EmailChange}
-                type="text"
-                placeholder="Email address"
-              />
-            </label>
-          </div>
 
-          <div className="signup-style">
-            <label className="signup-style">
-              Password
-              <input
-                onChange={this.PasswordChange}
-                type="password"
-                placeholder="Password"
-              />
-            </label>
-          </div>
 
-          <button className="button-LoginSign" onClick={this.btnSignUp}>Sign Up </button>
-          <div style={{ marginTop: "20px" }}>
-            Already have an account?{" "}
-            <Link to="/login" className="link-style">
-              Login here
-            </Link>
-          </div>
-        </form>
+  return (
+    <div className="background-image">
+    <div className="login-form">
+      <h2>Sign Up &#128523; </h2>
+      <div className="signup-style">
+        <label className="signup-style">
+          First name
+          <input
+            onChange={(e) => setFirstName(e.target.value)}
+            type="text"
+            placeholder="First name"
+          />
+        </label>
       </div>
-    );
-  }
+
+      <div className="signup-style">
+        <label className="signup-style">
+          Last name
+          <input
+            onChange={(e) => setLastName(e.target.value)}
+            type="text"
+            placeholder="Last name"
+          />
+        </label>
+      </div>
+
+      <div className="signup-style">
+        <label className="signup-style">
+          Email address
+          <input
+            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            placeholder="Email address"
+          />
+        </label>
+      </div>
+
+      <div className="signup-style">
+        <label className="signup-style">
+          Password
+          <input
+            onChange={(e) => setPassword(e.target.value)}
+            type="password"
+            placeholder="Password"
+          />
+        </label>
+      </div>
+
+      <button className="button-LoginSign" onClick={btnSignUp}>Sign Up </button>
+      <div style={{ marginTop: "20px" }}>
+        Already have an account?{" "}
+        <Link to="/login" className="link-style">
+          Login here
+        </Link>
+      </div>
+    </div>
+  </div>
+  );
 }
