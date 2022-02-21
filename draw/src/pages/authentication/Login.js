@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./css/login.css";
 import { FaUserAlt } from "react-icons/fa";
@@ -9,12 +9,11 @@ var url = "http://localhost:50434/api/users";
 //THE USER_ID is null for some reason
 
 export default function Login() {
-  const [Email, setEmail] = useState(null);
-  // const [FirstName, setFirstName] = useState(null);
-  // const [LastName, setLastName] = useState(null);
-  const [UserID, setUserID] = useState(null);
-  const [Password, setPassword] = useState(0);
+  const [Email, setEmail] = useState("");
+  const [UserID, setUserID] = useState(0);
+  const [Password, setPassword] = useState("");
   const navigate = useNavigate();
+
 
 
   const btnLogin = async () => {
@@ -26,11 +25,12 @@ export default function Login() {
       Email,
       Password
     );
-    console.log("returned value=" + s);
+    
+    console.log("returned value=" + s + "and id = " +s.User_ID);
+    setUserID(s.User_ID)
 
     if (s != null) 
     {
-      setUserID({ UserID: s.User_ID });
       console.log("user_id is =" + UserID);
       alert("התחברת בהצלחה!");
       navigate('/')
@@ -57,6 +57,7 @@ export default function Login() {
       let resultData = result.json();
       console.log("meowwww");
       console.log(resultData);
+
       if (resultData) {
         return resultData;
       } else {
