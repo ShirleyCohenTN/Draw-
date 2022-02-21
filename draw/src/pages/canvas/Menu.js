@@ -16,8 +16,14 @@ const Menu = ({
 
 
   const clearCanvas = () => {
+   //we fill the canvas in white to clear it
     var context = cvs.getContext('2d');
-    context.clearRect(0, 0, cvs.width, cvs.height);
+    context.fillStyle = 'white';
+    context.fillRect(0,0,cvs.width, cvs.height)
+
+   // context.clearRect(0, 0, cvs.width, cvs.height);
+
+
 }
 
 
@@ -26,7 +32,8 @@ const Menu = ({
 
     const downloadCanvas = () => {
       var canvas = document.getElementById("canvas");
-      canvas.fillStyle="blue";
+      canvas.fillStyle="purple";
+         
       var url = canvas.toDataURL("image/png");
       var link = document.createElement('a');
       link.download = 'MyCanvasDrawing.png';

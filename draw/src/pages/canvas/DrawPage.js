@@ -13,12 +13,18 @@ function DrawPage() {
   const [lineWidth, setLineWidth] = useState(5);
   const [lineColor, setLineColor] = useState("black");
   const [canvasID, setCanvasID] = useState(null);
+  const isFirstTime = true;
+  const [backgroundWhite, setBackgroundWhite] = useState(false);
   //const [lineOpacity, setLineOpacity] = useState(0.1);
 
-  
+
+
+
+
   // Initialization when the component
   // mounts for the first time
   useEffect(() => {
+    
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.lineCap = "round";
@@ -28,9 +34,20 @@ function DrawPage() {
     ctx.lineWidth = lineWidth;
     ctxRef.current = ctx;
  
+    
     //added white background to the canvas, so when we download the canvas image it will not be transparent
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0,0,canvas.width, canvas.height);
+    if(backgroundWhite==false)
+    {
+     ctx.fillStyle = 'white';
+        ctx.fillRect(0,0,canvas.width, canvas.height)
+        setBackgroundWhite(true)
+    }
+
+        // ctx.fillStyle = 'white';
+        // ctx.fillRect(0,0,canvas.width, canvas.height)
+     
+
+    
 
     let senders = {};
     //
@@ -69,6 +86,11 @@ function DrawPage() {
     //
   }, [lineColor, lineWidth]);
 
+
+
+
+  
+
   // Function for starting the drawing
   const startDrawing = (e) => {
     setIsDrawing(true);
@@ -95,7 +117,7 @@ function DrawPage() {
       canvasID: canvasID,
     };
     socket.emit("send-draw", drawXY);
-    ctxRef.current.stroke();
+    // ctxRef.current.stroke();
   };
 
   // Function for ending the drawing
@@ -125,6 +147,9 @@ function DrawPage() {
     socket.emit("join-room", ID);
   };
 
+
+
+  
   return (
     <div className="App">
       <h1>Draw!</h1>
