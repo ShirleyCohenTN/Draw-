@@ -4,6 +4,8 @@ import ChatBox from "../../chat/ChatBox";
 import { SocketContext } from "../../helpingComponents/socket";
 import './css/DrawPage.css'
 import Menu from "./Menu";
+import {useLocation} from 'react-router-dom';
+
 
 function DrawPage() {
   const socket = useContext(SocketContext);
@@ -16,6 +18,8 @@ function DrawPage() {
   const isFirstTime = true;
   const [backgroundWhite, setBackgroundWhite] = useState(false);
   //const [lineOpacity, setLineOpacity] = useState(0.1);
+
+  const location = useLocation();
 
 
 
@@ -53,7 +57,8 @@ function DrawPage() {
     //
     //socket logic start
     socket.on("connect", () => {
-      console.log(`connectionID: ${socket.id}`);
+      console.log(`connectionID: ${socket.id}`)
+      socket.emit(`getUserInfo`, location.state.fullName)
     });
 
     socket.on("receive-draw", (drawXY, senderID) => {
@@ -153,6 +158,7 @@ function DrawPage() {
   return (
     <div className="App">
       <h1>Draw!</h1>
+      <h2>Hello User ID: {location.state.userID} , Name: {location.state.fullName}</h2>
       <div className="draw-area">
         <Menu
           setLineColor={setLineColor}
@@ -176,7 +182,7 @@ function DrawPage() {
           height={`620px`}
         />
       </div>
-      <ChatBox />
+      <ChatBox userInfo={location.state.fullName}/>
     </div>
   );
 }
