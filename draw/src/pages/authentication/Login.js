@@ -13,10 +13,31 @@ export default function Login() {
   const [UserID, setUserID] = useState(0);
   const [Password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [user, setUser] =  useState([]);
+
+//   useEffect(()=>{
+//     fetch(url, {
+//     method: "GET", // 'GET', 'POST', 'PUT', 'DELETE', etc.
+//     headers: new Headers({
+//       "Content-Type": "application/json",
+//       Accept: "application/json",
+//     }),
+//   }).then(res=>{
+//     return res.json()
+//   }).then(data=>{
+//     setUser(data)
+//     console.log("from fetch:")
+//     console.log(data)
+//   });
+// },[])
 
 
 
   const btnLogin = async () => {
+ 
+    // console.log("from btnLogin:")
+    // console.log(user);
+
     console.log(1);
 
     console.log(Email + "," + Password);
@@ -26,20 +47,22 @@ export default function Login() {
       Password
     );
     
-    console.log("returned value=" + s + "and id = " +s.User_ID);
-    setUserID(s.User_ID)
+    console.log("returned value=" + s + "and id = " +s.User_ID); //here the it returns the right User ID ( id = 1)
+    setUserID(s.User_ID) // for some reason here it doesnt update the right value of the User ID
+
 
     if (s != null) 
     {
-      console.log("user_id is =" + UserID);
+      //console.log("updated id = " + s.User_ID)
+      //console.log("user_id is =" + UserID); // here it still prints User ID = 0 .. why?
       alert("התחברת בהצלחה!");
-      navigate('/')
+      navigate('/', {state: {userID : s.User_ID, fullName: s.First_Name + " " + s.Last_Name}})
 
       console.log("h1");
      
     } else {
       console.log("err login!");
-      alert("שגיאת התחברות");
+      alert("failed to login");
     }
   };
 

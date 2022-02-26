@@ -20,6 +20,16 @@ io.on("connection", (socket) => {
   });
 
   console.log(socket.id, ": connection O");
+  socket.on("getUserInfo", (userFullName) => {
+    socket.data.userFullName = userFullName;
+    console.log(
+      "id: ",
+      socket.id,
+      " name connected:",
+      socket.data.userFullName
+    );
+  });
+
   socket.on("send-draw", (drawXY) => {
     if (drawXY.canvasID)
       io.to(drawXY.canvasID).emit("receive-draw", drawXY, socket.id);
@@ -53,17 +63,32 @@ io.on("connection", (socket) => {
   //   socket.broadcast.emit("receive-end");
   // });
 
+  // socket.on("send-chat", (text) => {
+  //   io.emit("receive-chat", socket.id, text);
+  // });
+
   socket.on("send-chat", (text) => {
     if (socket.rooms.size > 1) {
       socket.rooms.forEach((canvasChat) => {
-        console.log("chat from {", socket.id, "} to {", canvasChat, "}");
-
+        console.log(
+          "chat from {",
+          socket.id,
+          "(",
+          socket.data.userFullName,
+          ")} to {",
+          canvasChat,
+          "}"
+        );
         if (socket.id != canvasChat) {
-          io.in(canvasChat).emit("receive-chat", socket.id, text);
+          io.in(canvasChat).emit(
+            "receive-chat",
+            socket.data.userFullName,
+            text
+          );
         }
       });
     } else {
-      io.to(socket.id).emit("receive-chat", socket.id, text);
+      io.to(socket.id).emit("receive-chat", socket.data.userFullName, text);
     }
   });
 
