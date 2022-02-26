@@ -4,8 +4,22 @@ const io = require("socket.io")(3030, {
   },
 });
 
+var onlineUsers = [];
+
+//listening to port connections
 io.on("connection", (socket) => {
-  console.log(socket.id, ": connection");
+  onlineUsers.push(socket.id);
+  console.log("users: ", onlineUsers);
+
+  //
+  socket.on("disconnect", (reason) => {
+    console.log(socket.id, ": disconnection X (", reason, ")");
+
+    var i = onlineUsers.indexOf(socket.id);
+    onlineUsers.splice(i, 1);
+  });
+
+  console.log(socket.id, ": connection O");
   socket.on("send-draw", (drawXY) => {
     if (drawXY.canvasID)
       io.to(drawXY.canvasID).emit("receive-draw", drawXY, socket.id);
@@ -19,7 +33,8 @@ io.on("connection", (socket) => {
       "}) ",
       "(to CanvasID: ",
       drawXY.canvasID,
-      ")"
+      ")",
+      socket.rooms
     );
   });
 
@@ -39,7 +54,17 @@ io.on("connection", (socket) => {
   // });
 
   socket.on("send-chat", (text) => {
-    io.emit("receive-chat", socket.id, text);
+    if (socket.rooms.size > 1) {
+      socket.rooms.forEach((canvasChat) => {
+        console.log("chat from {", socket.id, "} to {", canvasChat, "}");
+
+        if (socket.id != canvasChat) {
+          io.in(canvasChat).emit("receive-chat", socket.id, text);
+        }
+      });
+    } else {
+      io.to(socket.id).emit("receive-chat", socket.id, text);
+    }
   });
 
   socket.on("join-room", (roomID) => {

@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useRef, useState, useContext } from "react";
 import ChatBox from "../../chat/ChatBox";
 import { SocketContext } from "../../helpingComponents/socket";
-import './css/DrawPage.css'
+import "./css/DrawPage.css";
 import Menu from "./Menu";
 
 function DrawPage() {
@@ -17,14 +17,9 @@ function DrawPage() {
   const [backgroundWhite, setBackgroundWhite] = useState(false);
   //const [lineOpacity, setLineOpacity] = useState(0.1);
 
-
-
-
-
   // Initialization when the component
   // mounts for the first time
   useEffect(() => {
-    
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.lineCap = "round";
@@ -33,21 +28,16 @@ function DrawPage() {
     ctx.strokeStyle = lineColor;
     ctx.lineWidth = lineWidth;
     ctxRef.current = ctx;
- 
-    
+
     //added white background to the canvas, so when we download the canvas image it will not be transparent
-    if(backgroundWhite==false)
-    {
-     ctx.fillStyle = 'white';
-        ctx.fillRect(0,0,canvas.width, canvas.height)
-        setBackgroundWhite(true)
+    if (backgroundWhite == false) {
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      setBackgroundWhite(true);
     }
 
-        // ctx.fillStyle = 'white';
-        // ctx.fillRect(0,0,canvas.width, canvas.height)
-     
-
-    
+    // ctx.fillStyle = 'white';
+    // ctx.fillRect(0,0,canvas.width, canvas.height)
 
     let senders = {};
     //
@@ -55,6 +45,8 @@ function DrawPage() {
     socket.on("connect", () => {
       console.log(`connectionID: ${socket.id}`);
     });
+
+    //socket.on("disconnect", () => {});
 
     socket.on("receive-draw", (drawXY, senderID) => {
       console.log("draw:", drawXY, senderID);
@@ -85,11 +77,6 @@ function DrawPage() {
     //socket logic END
     //
   }, [lineColor, lineWidth]);
-
-
-
-
-  
 
   // Function for starting the drawing
   const startDrawing = (e) => {
@@ -147,9 +134,6 @@ function DrawPage() {
     socket.emit("join-room", ID);
   };
 
-
-
-  
   return (
     <div className="App">
       <h1>Draw!</h1>
@@ -160,14 +144,14 @@ function DrawPage() {
           //setLineOpacity={setLineOpacity}
 
           //sending the object to be able to clear the canvas
-          cvs = {canvasRef.current}
+          cvs={canvasRef.current}
           ID={canvasID}
           generatePublicCanvasID={generatePublicCanvasID}
           turnCanvasPrivate={turnCanvasPrivate}
           joinFriendsCanvas={joinFriendsCanvas}
         />
-        <canvas id="canvas"
-  
+        <canvas
+          id="canvas"
           onMouseDown={startDrawing}
           onMouseUp={endDrawing}
           onMouseMove={draw}
