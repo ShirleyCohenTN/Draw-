@@ -38,7 +38,7 @@ export default function SignUp() {
     } else {
       alert("נרשמת בהצלחה!");
 
-      navigate('/', {state: {fullname: `${FirstName} ${LastName}`}})
+      navigate('/', {state: {userID : s.User_ID, fullName: s.First_Name + " " + s.Last_Name}})
 
     }
   };
