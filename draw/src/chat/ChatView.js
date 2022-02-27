@@ -3,7 +3,6 @@ import React from "react";
 import { useEffect, useRef, useState, useContext } from "react";
 import { socket } from "../helpingComponents/socket";
 
-
 class ChatView extends React.Component {
   constructor(props) {
     super(props);
@@ -21,7 +20,9 @@ class ChatView extends React.Component {
   }
 
   mapElements = () => {
-    let element = (this.state.chatMessages || []).map((v) => <div>{v}</div>);
+    let element = (this.state.chatMessages || []).map((v, index) => (
+      <div key={index}>{v}</div>
+    ));
     return element;
   };
 

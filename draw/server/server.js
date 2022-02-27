@@ -5,13 +5,13 @@ const io = require("socket.io")(3030, {
 });
 
 var onlineUsers = [];
+var activeCanvases = [];
 
 //listening to port connections
 io.on("connection", (socket) => {
   onlineUsers.push(socket.id);
   console.log("users: ", onlineUsers);
 
-  //
   socket.on("disconnect", (reason) => {
     console.log(socket.id, ": disconnection X (", reason, ")");
 
@@ -49,23 +49,17 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send-start", (drawXY) => {
-    io.emit("receive-start", drawXY, socket.id);
+    if (drawXY.canvasID)
+      io.to(drawXY.canvasID).emit("receive-start", drawXY, socket.id);
+    else io.to(socket.id).emit("receive-start", drawXY, socket.id);
     console.log(socket.id, ": START");
   });
 
-  socket.on("send-end", () => {
-    io.emit("receive-end");
-    console.log(socket.id, ": END ");
+  socket.on("send-end", (canvasID) => {
+    if (canvasID) io.to(canvasID).emit("receive-end");
+    else io.to(socket.id).emit("receive-end");
+    console.log(socket.id, ": END ", canvasID);
   });
-
-  //
-  // socket.on("send-lineLog", (lineLog) => {
-  //   socket.broadcast.emit("receive-end");
-  // });
-
-  // socket.on("send-chat", (text) => {
-  //   io.emit("receive-chat", socket.id, text);
-  // });
 
   socket.on("send-chat", (text) => {
     if (socket.rooms.size > 1) {

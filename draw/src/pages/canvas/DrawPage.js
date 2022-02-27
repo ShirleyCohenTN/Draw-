@@ -14,11 +14,17 @@ function DrawPage() {
   const [lineWidth, setLineWidth] = useState(5);
   const [lineColor, setLineColor] = useState("black");
   const [canvasID, setCanvasID] = useState(null);
-  const isFirstTime = true;
   const [backgroundWhite, setBackgroundWhite] = useState(false);
-  //const [lineOpacity, setLineOpacity] = useState(0.1);
 
-  const location = useLocation();
+  //used for working without DB user
+  const fakeLocation = {
+    state: {
+      userID: "00000000",
+      fullName: "fakeUser",
+    },
+  };
+  const realLocation = useLocation();
+  const location = useLocation().state != null ? realLocation : fakeLocation;
 
   // Initialization when the component
   // mounts for the first time
@@ -108,14 +114,13 @@ function DrawPage() {
       canvasID: canvasID,
     };
     socket.emit("send-draw", drawXY);
-    // ctxRef.current.stroke();
   };
 
   // Function for ending the drawing
   const endDrawing = () => {
     ctxRef.current.closePath();
     setIsDrawing(false);
-    socket.emit("send-end");
+    socket.emit("send-end", canvasID);
   };
 
   const generatePublicCanvasID = () => {
