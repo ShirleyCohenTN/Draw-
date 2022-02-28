@@ -92,6 +92,7 @@ io.on("connection", (socket) => {
     }
   });
 
+  ////רואה את זה???
   socket.on("join-room", (roomID, ctx) => {
     try {
       console.log("ctx: ", ctx);
