@@ -39,7 +39,7 @@ function DrawPage() {
     ctxRef.current = ctx;
 
     //added white background to the canvas, so when we download the canvas image it will not be transparent
-    if (backgroundWhite == false) {
+    if (backgroundWhite === false) {
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       setBackgroundWhite(true);
@@ -83,6 +83,17 @@ function DrawPage() {
     socket.on("receive-end", () => {
       setIsDrawing(false);
       console.log("END");
+    });
+
+    socket.on("receive-canvas-data", (ctx) => {
+      console.log("receive-canvas-data ACTIVE: ");
+      var img = new Image();
+      img.src = ctx;
+      // img.src =
+      //   "https://filmfare.wwmindia.com/content/2021/nov/rrr11638189129.jpg";
+
+      ctxRef.current.drawImage(img, 0, 0);
+      console.log(img.src);
     });
     //socket logic END
     //
@@ -128,7 +139,8 @@ function DrawPage() {
     cID = cID.slice(cID.length - 4) + Math.floor(Math.random() * 100);
     socket.emit("leave-room", canvasID);
     setCanvasID(cID);
-    socket.emit("join-room", cID);
+    let canvasURL = canvasRef.current.toDataURL();
+    socket.emit("join-room", cID, canvasURL);
   };
 
   const turnCanvasPrivate = () => {
@@ -140,6 +152,7 @@ function DrawPage() {
   const joinFriendsCanvas = (ID) => {
     socket.emit("leave-room", canvasID);
     setCanvasID(ID);
+    socket.emit("get-canvas-data", canvasID);
     socket.emit("join-room", ID);
   };
 

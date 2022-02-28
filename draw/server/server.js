@@ -11,15 +11,18 @@ var activeCanvases = [];
 io.on("connection", (socket) => {
   onlineUsers.push(socket.id);
   console.log("users: ", onlineUsers);
+  console.log(socket.id, ": connection O");
 
+  //listening on port disconnection
   socket.on("disconnect", (reason) => {
     console.log(socket.id, ": disconnection X (", reason, ")");
 
     var i = onlineUsers.indexOf(socket.id);
     onlineUsers.splice(i, 1);
   });
+  /////////////////////////////////
 
-  console.log(socket.id, ": connection O");
+  //connecting user's name to socket ID
   socket.on("getUserInfo", (userFullName) => {
     socket.data.userFullName = userFullName;
     console.log(
@@ -29,7 +32,9 @@ io.on("connection", (socket) => {
       socket.data.userFullName
     );
   });
+  //////////////////////////////////////
 
+  //user is now drawing
   socket.on("send-draw", (drawXY) => {
     if (drawXY.canvasID)
       io.to(drawXY.canvasID).emit("receive-draw", drawXY, socket.id);
@@ -47,6 +52,7 @@ io.on("connection", (socket) => {
       socket.rooms
     );
   });
+  ///////////////////////
 
   socket.on("send-start", (drawXY) => {
     if (drawXY.canvasID)
@@ -86,19 +92,53 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("join-room", (roomID) => {
-    socket.join(roomID);
-    console.log(
-      socket.id,
-      " joined room: " + (roomID == "null" ? "self" : roomID)
-    );
+  socket.on("join-room", (roomID, ctx) => {
+    try {
+      console.log("ctx: ", ctx);
+      if (ctx) {
+        activeCanvases.push({ host: socket.id, roomID: roomID, ctx: ctx });
+        console.log("active Canvases: ", activeCanvases);
+      }
+      socket.join(roomID);
+      console.log(
+        socket.id,
+        " joined room: " + (roomID == "null" ? "self" : roomID)
+      );
+    } catch (error) {
+      console.log("failed");
+    }
+  });
+
+  socket.on("get-canvas-data", (roomID) => {
+    activeCanvases.forEach((item) => {
+      console.log("activeCanvases: ", item.roomID);
+    });
+
+    //var indexOfActiveCanvases1 = activeCanvases.findIndex((item)=>{return item.roomID == })
+
+    var indexOfActiveCanvases = activeCanvases
+      .map((e) => {
+        console.log("room:", roomID, " = ", e.roomID, "????");
+        return e.roomID;
+      }, roomID)
+      .indexOf(roomID);
+
+    if (indexOfActiveCanvases < 0) {
+      console.log(" NOT FOUND: ", indexOfActiveCanvases);
+    } else {
+      console.log(
+        "receive-canvas-data ACTIVE: ",
+        activeCanvases[indexOfActiveCanvases].roomID
+      );
+      io.to(socket.id).emit(
+        "receive-canvas-data",
+        activeCanvases[indexOfActiveCanvases].ctx
+      );
+    }
   });
 
   socket.on("leave-room", (roomID) => {
     socket.leave(roomID);
-    console.log(
-      socket.id,
-      " left room: " + (roomID == "null" ? "self" : roomID)
-    );
+    console.log(socket.id, " left room: " + (roomID == null ? "self" : roomID));
   });
 });
