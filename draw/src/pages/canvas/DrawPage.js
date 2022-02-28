@@ -12,6 +12,7 @@ function DrawPage() {
   const ctxRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [lineWidth, setLineWidth] = useState(5);
+  const [ctxToSave, setCtxToSave] = useState(null);
   const [lineColor, setLineColor] = useState("black");
   const [canvasID, setCanvasID] = useState(null);
   const [backgroundWhite, setBackgroundWhite] = useState(false);
@@ -88,16 +89,25 @@ function DrawPage() {
     socket.on("receive-canvas-data", (ctx) => {
       console.log("receive-canvas-data ACTIVE: ");
       var img = new Image();
-      img.src = ctx;
-      // img.src =
-      //   "https://filmfare.wwmindia.com/content/2021/nov/rrr11638189129.jpg";
+      //img.src = ctx;
+      img.src =
+        "https://filmfare.wwmindia.com/content/2021/nov/rrr11638189129.jpg";
 
       ctxRef.current.drawImage(img, 0, 0);
+      setCtxToSave(ctx);
+      console.log("CTX: ", ctxToSave);
       console.log(img.src);
     });
     //socket logic END
     //
-  }, [lineColor, lineWidth,backgroundWhite,socket,location.state.fullName]);
+  }, [
+    lineColor,
+    lineWidth,
+    backgroundWhite,
+    socket,
+    location.state.fullName,
+    ctxToSave,
+  ]);
 
   // Function for starting the drawing
   const startDrawing = (e) => {
