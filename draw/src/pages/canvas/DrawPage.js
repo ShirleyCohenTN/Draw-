@@ -97,7 +97,7 @@ function DrawPage() {
     });
     //socket logic END
     //
-  }, [lineColor, lineWidth]);
+  }, [lineColor, lineWidth,backgroundWhite,socket,location.state.fullName]);
 
   // Function for starting the drawing
   const startDrawing = (e) => {

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./css/login.css";
-import { FaUserAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 

@@ -1,0 +1,15 @@
+//   useEffect(()=>{
+//     fetch(url, {
+//     method: "GET", // 'GET', 'POST', 'PUT', 'DELETE', etc.
+//     headers: new Headers({
+//       "Content-Type": "application/json",
+//       Accept: "application/json",
+//     }),
+//   }).then(res=>{
+//     return res.json()
+//   }).then(data=>{
+//     setUser(data)
+//     console.log("from fetch:")
+//     console.log(data)
+//   });
+// },[])
