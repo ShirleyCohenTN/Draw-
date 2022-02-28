@@ -39,7 +39,7 @@ function DrawPage() {
     ctxRef.current = ctx;
 
     //added white background to the canvas, so when we download the canvas image it will not be transparent
-    if (backgroundWhite == false) {
+    if (backgroundWhite === false) {
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       setBackgroundWhite(true);
@@ -86,7 +86,7 @@ function DrawPage() {
     });
     //socket logic END
     //
-  }, [lineColor, lineWidth]);
+  }, [lineColor, lineWidth,backgroundWhite,socket,location.state.fullName]);
 
   // Function for starting the drawing
   const startDrawing = (e) => {

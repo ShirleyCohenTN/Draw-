@@ -1,14 +1,14 @@
 import React from "react";
-import { useEffect, useRef, useState, useContext } from "react";
+import {useState, useContext } from "react";
 import { SocketContext } from "../helpingComponents/socket";
 
-function ChatWrite() {
+function ChatWrite({userInfo}) {
   const socket = useContext(SocketContext);
   const [chatMassage, setChatMassage] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    socket.emit("send-chat", chatMassage);
+    socket.emit("send-chat", userInfo+': '+chatMassage);
   };
 
   const handleChange = (e) => {

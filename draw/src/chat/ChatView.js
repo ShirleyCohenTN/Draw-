@@ -1,6 +1,4 @@
-import { render } from "@testing-library/react";
 import React from "react";
-import { useEffect, useRef, useState, useContext } from "react";
 import { socket } from "../helpingComponents/socket";
 
 class ChatView extends React.Component {
@@ -14,7 +12,7 @@ class ChatView extends React.Component {
 
     socket.on("receive-chat", (sender, text) => {
       console.log("massage received");
-      this.state.chatMessages.push(sender + ": " + text);
+      this.state.chatMessages.push(text);
       this.setState({ chatMessages: this.state.chatMessages });
     });
   }
