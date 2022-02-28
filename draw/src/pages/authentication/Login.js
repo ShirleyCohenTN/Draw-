@@ -56,7 +56,7 @@ export default function Login() {
       //console.log("updated id = " + s.User_ID)
       //console.log("user_id is =" + UserID); // here it still prints User ID = 0 .. why?
       alert("התחברת בהצלחה!");
-      navigate('/', {state: {userID : s.User_ID, fullName: s.First_Name + " " + s.Last_Name}})
+      navigate('/drawing', {state: {userID : s.User_ID, fullName: s.First_Name + " " + s.Last_Name}})
 
       console.log("h1");
      

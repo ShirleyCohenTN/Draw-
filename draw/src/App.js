@@ -14,8 +14,8 @@ function App() {
     <SocketContext.Provider value={socket}>
       <Router>
         <Routes>
-          <Route path="/" element={<DrawPage />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/drawing" element={<DrawPage />} />
           <Route path="/signup" element={<SignUp />} />
         </Routes>
       </Router>
