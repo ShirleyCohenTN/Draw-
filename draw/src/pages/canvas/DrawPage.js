@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useEffect, useRef, useState, useContext } from "react";
 import ChatBox from "../../chat/ChatBox";
 import { SocketContext } from "../../helpingComponents/socket";
@@ -30,6 +30,7 @@ function DrawPage() {
   // Initialization when the component
   // mounts for the first time
   useEffect(() => {
+    console.log("useEffect() IS ON");
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.lineCap = "round";
@@ -87,26 +88,25 @@ function DrawPage() {
     });
 
     socket.on("receive-canvas-data", (ctx) => {
-      console.log("receive-canvas-data ACTIVE: ");
+      console.log("receive-canvas-data: RECEIVED CTX:", ctx);
       var img = new Image();
-      //img.src = ctx;
-      img.src =
-        "https://filmfare.wwmindia.com/content/2021/nov/rrr11638189129.jpg";
-
-      ctxRef.current.drawImage(img, 0, 0);
+      img.onload = () => {
+        ctxRef.current.drawImage(img, 0, 0);
+      };
+      img.src = ctx;
+      // img.src =
+      //   "https://filmfare.wwmindia.com/content/2021/nov/rrr11638189129.jpg";
       setCtxToSave(ctx);
-      console.log("CTX: ", ctxToSave);
-      console.log(img.src);
     });
     //socket logic END
     //
   }, [
     lineColor,
     lineWidth,
-    backgroundWhite,
+    //backgroundWhite,
     socket,
     location.state.fullName,
-    ctxToSave,
+    //ctxToSave,
   ]);
 
   // Function for starting the drawing
@@ -141,7 +141,8 @@ function DrawPage() {
   const endDrawing = () => {
     ctxRef.current.closePath();
     setIsDrawing(false);
-    socket.emit("send-end", canvasID);
+    let canvasURL = canvasRef.current.toDataURL();
+    socket.emit("send-end", canvasID, canvasURL);
   };
 
   const generatePublicCanvasID = () => {
@@ -150,7 +151,7 @@ function DrawPage() {
     socket.emit("leave-room", canvasID);
     setCanvasID(cID);
     let canvasURL = canvasRef.current.toDataURL();
-    socket.emit("join-room", cID, canvasURL);
+    socket.emit("create-room", cID, canvasURL);
   };
 
   const turnCanvasPrivate = () => {
@@ -162,8 +163,8 @@ function DrawPage() {
   const joinFriendsCanvas = (ID) => {
     socket.emit("leave-room", canvasID);
     setCanvasID(ID);
-    socket.emit("get-canvas-data", canvasID);
     socket.emit("join-room", ID);
+    socket.emit("get-canvas-data", ID);
   };
 
   return (

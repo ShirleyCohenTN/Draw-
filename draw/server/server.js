@@ -16,7 +16,7 @@ io.on("connection", (socket) => {
   //listening on port disconnection
   socket.on("disconnect", (reason) => {
     console.log(socket.id, ": disconnection X (", reason, ")");
-
+    //remove disconnected users from onlineUsers
     var i = onlineUsers.indexOf(socket.id);
     onlineUsers.splice(i, 1);
   });
@@ -39,34 +39,53 @@ io.on("connection", (socket) => {
     if (drawXY.canvasID)
       io.to(drawXY.canvasID).emit("receive-draw", drawXY, socket.id);
     else io.to(socket.id).emit("receive-draw", drawXY, socket.id);
-    console.log(
-      socket.id,
-      ": DRAW (brush: {",
-      drawXY.Color,
-      ", ",
-      drawXY.Width,
-      "}) ",
-      "(to CanvasID: ",
-      drawXY.canvasID,
-      ")",
-      socket.rooms
-    );
+    // console.log(
+    //   socket.id,
+    //   ": DRAW (brush: {",
+    //   drawXY.Color,
+    //   ", ",
+    //   drawXY.Width,
+    //   "}) ",
+    //   "(to CanvasID: ",
+    //   drawXY.canvasID,
+    //   ")",
+    //   socket.rooms
+    // );
   });
   ///////////////////////
 
+  //user start drawing a line
   socket.on("send-start", (drawXY) => {
     if (drawXY.canvasID)
       io.to(drawXY.canvasID).emit("receive-start", drawXY, socket.id);
     else io.to(socket.id).emit("receive-start", drawXY, socket.id);
-    console.log(socket.id, ": START");
+    //console.log(socket.id, ": START");
   });
+  ///////////////////////////
 
-  socket.on("send-end", (canvasID) => {
+  //user stop drawing a line
+  socket.on("send-end", (canvasID, canvasCurrent) => {
     if (canvasID) io.to(canvasID).emit("receive-end");
     else io.to(socket.id).emit("receive-end");
     console.log(socket.id, ": END ", canvasID);
-  });
 
+    activeCanvases.map((canvas) => {
+      console.log(
+        "SEND-END: ",
+        canvas.roomID,
+        "==",
+        canvasID,
+        canvas.roomID == canvasID
+      );
+      if (canvas.roomID == canvasID) {
+        console.log();
+        canvas.ctx = canvasCurrent;
+      }
+    });
+  });
+  ///////////////////////////
+
+  //chat sent
   socket.on("send-chat", (text) => {
     if (socket.rooms.size > 1) {
       socket.rooms.forEach((canvasChat) => {
@@ -91,48 +110,100 @@ io.on("connection", (socket) => {
       io.to(socket.id).emit("receive-chat", socket.data.userFullName, text);
     }
   });
+  //////////
 
+  //user joined an existing PUBLIC canvas
   socket.on("join-room", (roomID, ctx) => {
     try {
-      console.log("ctx: ", ctx);
-      if (ctx) {
-        activeCanvases.push({ host: socket.id, roomID: roomID, ctx: ctx });
-        console.log("active Canvases: ", activeCanvases);
-      }
+      let canvasToJoin = activeCanvases.find(
+        (canvas) => canvas.roomID === roomID
+      );
+      console.log("canvasToJoin: ", canvasToJoin.roomID);
+      activeCanvases.map((canvas) => {
+        if (canvas === canvasToJoin) {
+          canvas.connected.push(socket.id);
+        }
+      });
+
+      //adding the friend to the canvas
       socket.join(roomID);
       console.log(
         socket.id,
         " joined room: " + (roomID == "null" ? "self" : roomID)
       );
+      ////////////////////////////////
     } catch (error) {
-      console.log("failed");
+      console.log("failed", error);
+    }
+  });
+  ////////////////////////////////////////
+
+  //user turned it's canvas PUBLIC
+  socket.on("create-room", (roomID, ctx) => {
+    try {
+      //when public canvas is created, it is added to the list of active canvases
+      activeCanvases.push({
+        host: socket.id,
+        roomID: roomID,
+        ctx: ctx,
+        connected: [socket.id],
+      });
+      let onlyRoomsArray = activeCanvases.map((activeCanvas) => {
+        return activeCanvas.roomID;
+      });
+      console.log("active Canvases: {", onlyRoomsArray, "}");
+      ////////////////////////////////////////////////////////////////////////////
+
+      //adding the creator to the canvas
+      socket.join(roomID);
+      console.log(
+        socket.id,
+        " Created room: " + (roomID == "null" ? "self" : roomID)
+      );
+      ///////////////////////////////////
+    } catch (error) {
+      console.log("failed: ", error);
     }
   });
 
   socket.on("get-canvas-data", (roomID) => {
-    activeCanvases.forEach((item) => {
-      console.log("activeCanvases: ", item.roomID);
-    });
+    let indexOfActiveCanvases = activeCanvases.map((activeCanvas, index) => {
+      if (activeCanvas.roomID == roomID) {
+        console.log(
+          "get-canvas-data: ",
+          "room:",
+          roomID,
+          " == ",
+          activeCanvas.roomID,
+          roomID == activeCanvas.roomID
+        );
+        return activeCanvas;
+      }
+    }, roomID);
 
-    //var indexOfActiveCanvases1 = activeCanvases.findIndex((item)=>{return item.roomID == })
+    // var indexOfActiveCanvases = activeCanvases
+    //   .map((e) => {
+    //     console.log("room:", roomID, " = ", e.roomID, "????");
+    //     return e.roomID;
+    //   }, roomID)
+    //   .indexOf(roomID);
 
-    var indexOfActiveCanvases = activeCanvases
-      .map((e) => {
-        console.log("room:", roomID, " = ", e.roomID, "????");
-        return e.roomID;
-      }, roomID)
-      .indexOf(roomID);
-
-    if (indexOfActiveCanvases < 0) {
+    if (indexOfActiveCanvases.length <= 0) {
       console.log(" NOT FOUND: ", indexOfActiveCanvases);
     } else {
       console.log(
-        "receive-canvas-data ACTIVE: ",
-        activeCanvases[indexOfActiveCanvases].roomID
+        "receive-canvas-data: FOUND ON ",
+        indexOfActiveCanvases,
+        " - "
+        //activeCanvases[indexOfActiveCanvases].roomID
       );
+      // console.log(
+      //   "receive-canvas-data: SENDING CTX ",
+      //   indexOfActiveCanvases[0].ctx
+      // );
       io.to(socket.id).emit(
         "receive-canvas-data",
-        activeCanvases[indexOfActiveCanvases].ctx
+        indexOfActiveCanvases[0].ctx
       );
     }
   });
