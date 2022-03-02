@@ -110,6 +110,7 @@ function DrawPage() {
     //backgroundWhite,
     socket,
     location.state.fullName,
+    canvasAsString
     //ctxToSave,
   ]);
 

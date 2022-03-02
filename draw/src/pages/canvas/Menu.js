@@ -58,7 +58,7 @@ const Menu = ({
     );
     console.log("returned value=" + s);
 
-    setNewCanvasID({ newCanvasID: s.Canvas_ID });
+    setNewCanvasID(s.Canvas_ID);
 
     console.log("canvas_id is =" + s.Canvas_ID);
 
@@ -121,6 +121,7 @@ const Menu = ({
 
   }
 
+  
   return (
     <div className="Menu">
       <label>Brush Color </label>
