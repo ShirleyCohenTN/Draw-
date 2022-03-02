@@ -28,15 +28,15 @@ h1 {
 }
   
 .Menu {
-  width: 800px;
-  height: 50px;
+  width: 1200px;
+  height: 60px;
   display: flex;
   justify-content: space-evenly;
   border-radius: 1px;
   align-items: center;
   background-color: #2f3ce92d;
   margin: auto;
-  margin-top: 10px;
+  margin-top: 2px;
   font-family: "arial";
   font-weight: bolder;
   
@@ -49,8 +49,19 @@ h1 {
     background-color: rgb(20, 158, 27);
     font-weight: bold;
     cursor: pointer;
-    color:whitesmoke
+    color:whitesmoke;
+    margin:1%;
+    width:20%;
     
+}
+
+.Menu button:hover{
+  border-radius: 80px;
+  background-color: rgb(138, 247, 123);
+  font-weight: bold;
+  cursor: pointer;
+  color:black;
+  
 }
 
 

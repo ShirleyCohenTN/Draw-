@@ -1,7 +1,13 @@
-import React from "react";
+import React , { useState } from "react";
 import CanvasID from "../../share/CanvasID";
 import JoinCanvas from "../../share/JoinCanvas";
 import "./css/DrawPage.css";
+
+
+
+var url = "http://localhost:50434/api/uploadCanvas";
+
+
 
 const Menu = ({
   setLineColor,
@@ -12,7 +18,13 @@ const Menu = ({
   turnCanvasPrivate,
   joinFriendsCanvas,
   cvs,
+  canvasAsString, 
+  UserID
 }) => {
+
+  const [newCanvasID, setNewCanvasID] = useState(0);
+  const test = "tktkt";
+
   const clearCanvas = () => {
     //we fill the canvas in white to clear it
     var context = cvs.getContext("2d");
@@ -32,6 +44,82 @@ const Menu = ({
     link.href = url;
     link.click();
   };
+
+
+
+
+
+
+  const btnSaveCanvas = async () => {
+    let s = await AddNewCanvas(
+      UserID,
+      canvasAsString,
+      test
+    );
+    console.log("returned value=" + s);
+
+    setNewCanvasID({ newCanvasID: s.Canvas_ID });
+
+    console.log("canvas_id is =" + s.Canvas_ID);
+
+    if (s == null) {
+      alert("הקאנבס לא נשמר");
+    } else {
+      alert("הקאנבס נשמר בהצלחה!");
+
+      //navigate('/', {state: {userID : s.User_ID, fullName: s.First_Name + " " + s.Last_Name}})
+
+    }
+  };
+
+  const AddNewCanvas = async (UserID, canvasAsString, test) => {
+    let returnedObj = null;
+
+    let obj2Send = {
+      User_ID: UserID,
+      Canvas_Path: canvasAsString,
+      Canvas_Coordinates: test
+    };
+
+    await fetch(url, {
+      method: "POST", // 'GET', 'POST', 'PUT', 'DELETE', etc.
+      body: JSON.stringify(obj2Send),
+      headers: new Headers({
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      }),
+    }) // Call the fetch function passing the url of the API as a parameter
+      .then((resp) => resp.json()) // Transform the data into json
+      .then(function (data) {
+        console.log(data);
+        if (!data.toString().includes("could not insert")) {
+          // console.log(data.email);
+          // console.log(data.pass);
+          returnedObj = data;
+        } else {
+          console.log("didnt inserted!");
+          returnedObj = null;
+        }
+      })
+      .catch(function (err) {
+        alert(err);
+      });
+
+    return returnedObj;
+  };
+
+
+
+
+
+
+  const saveMyCanvas = () => {
+    console.log("the string is: ",  canvasAsString);
+
+
+
+
+  }
 
   return (
     <div className="Menu">
@@ -53,7 +141,7 @@ const Menu = ({
       />
       <button onClick={clearCanvas}>Clear Canvas</button>
       <button onClick={downloadCanvas}>Save Image</button>
-      <button>Invite a Friend</button>
+      <button onClick={btnSaveCanvas}>Save My Canvas</button>
 
       <CanvasID
         generatePublicCanvasID={generatePublicCanvasID}

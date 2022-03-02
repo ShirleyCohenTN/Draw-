@@ -16,6 +16,7 @@ function DrawPage() {
   const [lineColor, setLineColor] = useState("black");
   const [canvasID, setCanvasID] = useState(null);
   const [backgroundWhite, setBackgroundWhite] = useState(false);
+  const [canvasAsString, setCanvasAsString]=useState("empty string")
 
   //used for working without DB user
   const fakeLocation = {
@@ -39,6 +40,9 @@ function DrawPage() {
     ctx.strokeStyle = lineColor;
     ctx.lineWidth = lineWidth;
     ctxRef.current = ctx;
+
+
+    setCanvasAsString(canvas.toDataURL());
 
     //added white background to the canvas, so when we download the canvas image it will not be transparent
     if (backgroundWhite === false) {
@@ -185,6 +189,9 @@ function DrawPage() {
           generatePublicCanvasID={generatePublicCanvasID}
           turnCanvasPrivate={turnCanvasPrivate}
           joinFriendsCanvas={joinFriendsCanvas}
+
+          UserID = {location.state.userID}
+          canvasAsString={canvasAsString}
         />
         <canvas
           id="canvas"
