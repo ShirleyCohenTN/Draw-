@@ -10,7 +10,7 @@ var url = "http://localhost:50434/api/canvases";
 function MyCanvases() {
     const [canvases, setCanvases] = useState([]);
  
-
+    var img = new Image();
 
     useEffect(() => {
       console.log("im here");
@@ -71,10 +71,17 @@ function MyCanvases() {
 <div>
     {canvases.map((item, index) => {
         return(
-            <div className="pics" key={index}>
+            <div key={index}>
 
                 {/*  BASE64 אני לא יודעת איך להמיר את זה לתמונה ולא*/}
-                <img src = {`data:image/png;base64,${item.Canvas_Path}`}/>
+                {/* <img src = {`data:image/png;base64,${item.Canvas_Path}`}/> */}
+                <img src = {item.Canvas_Path}/>
+                <img src = "https://facebook.github.io/react-native/docs/assets/favicon.png" />
+                {/* <Image ></Image> */}
+      {/* img.onload = () => {
+        ctxRef.current.drawImage(img, 0, 0);
+      }; */}
+
 
              </div>
         )
