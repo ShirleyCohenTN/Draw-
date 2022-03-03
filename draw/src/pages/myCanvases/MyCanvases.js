@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "./css/MyCanvases.css";
 // import delete from '../../images/delete.png';
+import { useLocation } from "react-router-dom";
+import Menu from "../canvas/Menu";
+
+
 
 var url = "http://localhost:50434/api/canvases";
 
 function MyCanvases() {
   const [canvases, setCanvases] = useState([]);
    const [canvasesAfterDelete, setCanvasesAfterDelete] = useState([]);
+
+   const location = useLocation();
 
   var img = new Image();
 
@@ -15,11 +21,11 @@ function MyCanvases() {
 
     // getAllCanvasesByUser();
 
-    getAllCanvases();
+    getAllCanvasesByUser();
   }, []);
 
-  const getAllCanvases = () => {
-    fetch(url, {
+  const getAllCanvasesByUser = () => {
+    fetch(url+ `?user_id=${location.state.UserID}`, {
       method: "GET", // 'GET', 'POST', 'PUT', 'DELETE', etc.
       headers: new Headers({
         "Content-Type": "application/json",

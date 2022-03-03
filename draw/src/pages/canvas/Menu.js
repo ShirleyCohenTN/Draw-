@@ -2,6 +2,8 @@ import React , { useState } from "react";
 import CanvasID from "../../share/CanvasID";
 import JoinCanvas from "../../share/JoinCanvas";
 import "./css/DrawPage.css";
+import {useNavigate} from "react-router-dom";
+
 
 
 
@@ -24,6 +26,8 @@ const Menu = ({
 
   const [newCanvasID, setNewCanvasID] = useState(0);
   const test = "tktkt";
+  const navigate = useNavigate();
+
 
   const clearCanvas = () => {
     //we fill the canvas in white to clear it
@@ -116,9 +120,16 @@ const Menu = ({
   const saveMyCanvas = () => {
     console.log("the string is: ",  canvasAsString);
 
+  }
 
 
-
+  const btnGoToMyCanvases = (UserID) => {
+    console.log("my id is: ", UserID );
+    navigate('/mycanvases', {
+      state: {
+        UserID: UserID
+      }
+  })
   }
 
   
@@ -143,6 +154,7 @@ const Menu = ({
       <button onClick={clearCanvas}>Clear Canvas</button>
       <button onClick={downloadCanvas}>Save Image</button>
       <button onClick={btnSaveCanvas}>Save My Canvas</button>
+      <button onClick={()=>btnGoToMyCanvases(UserID)}>Go To My Canvases</button>
 
       <CanvasID
         generatePublicCanvasID={generatePublicCanvasID}
