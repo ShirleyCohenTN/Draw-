@@ -83,6 +83,15 @@ function MyCanvases() {
      });
   };
 
+
+
+
+  const btnDuplicate = (User_ID, Canvas_Path, Canvas_Coordinates) => {
+      console.log("meow")
+  }
+
+
+
   return (
     <div style={{ backgroundColor: "gray" }}>
       <h2 style={{ textAlign: "center" }}>My Canvases</h2>
@@ -107,7 +116,8 @@ function MyCanvases() {
                   {/* <img style={{width:"30%", display:"inline-block"}} src={require('../../images/delete.png')} /> */}
                 </button>
 
-                <button className="button-style">
+                <button className="button-style"
+                onClick={() => btnDuplicate(item.User_ID, item.Canvas_Path, item.Canvas_Coordinates)}>
                   Duplicate
                   {/* <img style={{width:"30%", display:"inline-block"}} src={require('../../images/delete.png')} /> */}
                 </button>
