@@ -55,11 +55,13 @@ const Menu = ({
 
 
   const btnSaveCanvas = async () => {
+
     let s = await AddNewCanvas(
       UserID,
       canvasAsString,
       test
     );
+    
     console.log("returned value=" + s);
 
     setNewCanvasID(s.Canvas_ID);
