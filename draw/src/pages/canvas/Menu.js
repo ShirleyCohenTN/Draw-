@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import CanvasID from "../../share/CanvasID";
 import JoinCanvas from "../../share/JoinCanvas";
 import "./css/DrawPage.css";
+import {useNavigate} from "react-router-dom";
+
 
 var url = "http://localhost:50434/api/uploadCanvas";
 
@@ -20,6 +22,8 @@ const Menu = ({
 }) => {
   const [newCanvasID, setNewCanvasID] = useState(0);
   const test = "tktkt";
+  const navigate = useNavigate();
+
 
   // const clearCanvas = () => {
   //   //we fill the canvas in white to clear it
@@ -42,7 +46,17 @@ const Menu = ({
   };
 
   const btnSaveCanvas = async () => {
+<<<<<<< HEAD
     let s = await AddNewCanvas(UserID, canvasAsString, test);
+=======
+
+    let s = await AddNewCanvas(
+      UserID,
+      canvasAsString,
+      test
+    );
+    
+>>>>>>> 7a0c9d681e6310d97ffcb322e50d192d5d529110
     console.log("returned value=" + s);
 
     setNewCanvasID(s.Canvas_ID);
@@ -98,6 +112,22 @@ const Menu = ({
     console.log("the string is: ", canvasAsString);
   };
 
+<<<<<<< HEAD
+=======
+  }
+
+
+  const btnGoToMyCanvases = (UserID) => {
+    console.log("my id is: ", UserID );
+    navigate('/mycanvases', {
+      state: {
+        UserID: UserID
+      }
+  })
+  }
+
+  
+>>>>>>> 7a0c9d681e6310d97ffcb322e50d192d5d529110
   return (
     <div className="Menu">
       <label>Brush Color </label>
@@ -119,6 +149,7 @@ const Menu = ({
       <button onClick={sendClearCanvas}>Clear Canvas</button>
       <button onClick={downloadCanvas}>Save Image</button>
       <button onClick={btnSaveCanvas}>Save My Canvas</button>
+      <button onClick={()=>btnGoToMyCanvases(UserID)}>Go To My Canvases</button>
 
       <CanvasID
         generatePublicCanvasID={generatePublicCanvasID}
