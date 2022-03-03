@@ -43,10 +43,6 @@ function DrawPage() {
     ctx.strokeStyle = lineColor;
     ctx.lineWidth = lineWidth;
     ctxRef.current = ctx;
-<<<<<<< HEAD
-
-=======
->>>>>>> 7a0c9d681e6310d97ffcb322e50d192d5d529110
     setCanvasAsString(canvas.toDataURL());
 
     //added white background to the canvas, so when we download the canvas image it will not be transparent
@@ -120,14 +116,10 @@ function DrawPage() {
     lineWidth,
     //backgroundWhite,
     socket,
-<<<<<<< HEAD
-    //location.state.fullName,
-    //canvasAsString,
-=======
     location.state.fullName,
-    canvasAsString
-    ,canvasRef,ctxRef
->>>>>>> 7a0c9d681e6310d97ffcb322e50d192d5d529110
+    canvasAsString,
+    canvasRef,
+    ctxRef,
     //ctxToSave,
   ]);
 
@@ -166,7 +158,6 @@ function DrawPage() {
     let canvasURL = canvasRef.current.toDataURL();
     socket.emit("send-end", canvasID, canvasURL);
     setCanvasAsString(canvasURL);
-
   };
 
   const clearCanvas = () => {
