@@ -40,8 +40,6 @@ function DrawPage() {
     ctx.strokeStyle = lineColor;
     ctx.lineWidth = lineWidth;
     ctxRef.current = ctx;
-
-
     setCanvasAsString(canvas.toDataURL());
 
     //added white background to the canvas, so when we download the canvas image it will not be transparent
@@ -111,6 +109,7 @@ function DrawPage() {
     socket,
     location.state.fullName,
     canvasAsString
+    ,canvasRef,ctxRef
     //ctxToSave,
   ]);
 
@@ -148,6 +147,8 @@ function DrawPage() {
     setIsDrawing(false);
     let canvasURL = canvasRef.current.toDataURL();
     socket.emit("send-end", canvasID, canvasURL);
+    setCanvasAsString(canvasURL);
+
   };
 
   const generatePublicCanvasID = () => {
