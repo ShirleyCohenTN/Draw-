@@ -1,13 +1,9 @@
-import React , { useState } from "react";
+import React, { useState } from "react";
 import CanvasID from "../../share/CanvasID";
 import JoinCanvas from "../../share/JoinCanvas";
 import "./css/DrawPage.css";
 
-
-
 var url = "http://localhost:50434/api/uploadCanvas";
-
-
 
 const Menu = ({
   setLineColor,
@@ -17,20 +13,20 @@ const Menu = ({
   generatePublicCanvasID,
   turnCanvasPrivate,
   joinFriendsCanvas,
-  cvs,
-  canvasAsString, 
-  UserID
+  //cvs,
+  canvasAsString,
+  UserID,
+  sendClearCanvas,
 }) => {
-
   const [newCanvasID, setNewCanvasID] = useState(0);
   const test = "tktkt";
 
-  const clearCanvas = () => {
-    //we fill the canvas in white to clear it
-    var context = cvs.getContext("2d");
-    context.fillStyle = "white";
-    context.fillRect(0, 0, cvs.width, cvs.height);
-  };
+  // const clearCanvas = () => {
+  //   //we fill the canvas in white to clear it
+  //   var context = cvs.getContext("2d");
+  //   context.fillStyle = "white";
+  //   context.fillRect(0, 0, cvs.width, cvs.height);
+  // };
 
   //work
 
@@ -45,17 +41,8 @@ const Menu = ({
     link.click();
   };
 
-
-
-
-
-
   const btnSaveCanvas = async () => {
-    let s = await AddNewCanvas(
-      UserID,
-      canvasAsString,
-      test
-    );
+    let s = await AddNewCanvas(UserID, canvasAsString, test);
     console.log("returned value=" + s);
 
     setNewCanvasID(s.Canvas_ID);
@@ -68,7 +55,6 @@ const Menu = ({
       alert("הקאנבס נשמר בהצלחה!");
 
       //navigate('/', {state: {userID : s.User_ID, fullName: s.First_Name + " " + s.Last_Name}})
-
     }
   };
 
@@ -78,7 +64,7 @@ const Menu = ({
     let obj2Send = {
       User_ID: UserID,
       Canvas_Path: canvasAsString,
-      Canvas_Coordinates: test
+      Canvas_Coordinates: test,
     };
 
     await fetch(url, {
@@ -108,20 +94,10 @@ const Menu = ({
     return returnedObj;
   };
 
-
-
-
-
-
   const saveMyCanvas = () => {
-    console.log("the string is: ",  canvasAsString);
+    console.log("the string is: ", canvasAsString);
+  };
 
-
-
-
-  }
-
-  
   return (
     <div className="Menu">
       <label>Brush Color </label>
@@ -140,7 +116,7 @@ const Menu = ({
           setLineWidth(e.target.value);
         }}
       />
-      <button onClick={clearCanvas}>Clear Canvas</button>
+      <button onClick={sendClearCanvas}>Clear Canvas</button>
       <button onClick={downloadCanvas}>Save Image</button>
       <button onClick={btnSaveCanvas}>Save My Canvas</button>
 

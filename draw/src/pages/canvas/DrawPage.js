@@ -5,6 +5,8 @@ import { SocketContext } from "../../helpingComponents/socket";
 import "./css/DrawPage.css";
 import Menu from "./Menu";
 import { useLocation } from "react-router-dom";
+import ConnectedUserIcon from "../../connectedUsers/ConnectedUserIcon";
+import ConnectedUserList from "../../connectedUsers/ConnectedUsersList";
 
 function DrawPage() {
   const socket = useContext(SocketContext);
@@ -16,13 +18,14 @@ function DrawPage() {
   const [lineColor, setLineColor] = useState("black");
   const [canvasID, setCanvasID] = useState(null);
   const [backgroundWhite, setBackgroundWhite] = useState(false);
-  const [canvasAsString, setCanvasAsString]=useState("empty string")
+  const [canvasAsString, setCanvasAsString] = useState("empty string");
+  const [connectedUsers, setConnectedUsers] = useState([]);
 
   //used for working without DB user
   const fakeLocation = {
     state: {
-      userID: "00000000",
-      fullName: "fakeUser",
+      userID: "00000000" + (Math.floor(Math.random() * 10) + 1),
+      fullName: "fakeUser" + (Math.floor(Math.random() * 10) + 1),
     },
   };
   const realLocation = useLocation();
@@ -41,7 +44,6 @@ function DrawPage() {
     ctx.lineWidth = lineWidth;
     ctxRef.current = ctx;
 
-
     setCanvasAsString(canvas.toDataURL());
 
     //added white background to the canvas, so when we download the canvas image it will not be transparent
@@ -50,9 +52,6 @@ function DrawPage() {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       setBackgroundWhite(true);
     }
-
-    // ctx.fillStyle = 'white';
-    // ctx.fillRect(0,0,canvas.width, canvas.height)
 
     let senders = {};
     //
@@ -102,6 +101,15 @@ function DrawPage() {
       //   "https://filmfare.wwmindia.com/content/2021/nov/rrr11638189129.jpg";
       setCtxToSave(ctx);
     });
+
+    socket.on("update-list-of-connected-users", (updatedConnectedUsersList) => {
+      setConnectedUsers(updatedConnectedUsersList);
+    });
+
+    socket.on("clear-canvas", () => {
+      clearCanvas();
+    });
+
     //socket logic END
     //
   }, [
@@ -109,8 +117,8 @@ function DrawPage() {
     lineWidth,
     //backgroundWhite,
     socket,
-    location.state.fullName,
-    canvasAsString
+    //location.state.fullName,
+    //canvasAsString,
     //ctxToSave,
   ]);
 
@@ -150,12 +158,29 @@ function DrawPage() {
     socket.emit("send-end", canvasID, canvasURL);
   };
 
+  const clearCanvas = () => {
+    ctxRef.current.fillStyle = "white";
+    ctxRef.current.fillRect(
+      0,
+      0,
+      canvasRef.current.width,
+      canvasRef.current.height
+    );
+    console.log("ClearCanvas() was activated");
+  };
+
+  const sendClearCanvas = () => {
+    //console.log("sendClearCanvas was activated");
+    socket.emit("send-clear-canvas", canvasID);
+  };
+
   const generatePublicCanvasID = () => {
     let cID = "" + socket.id;
     cID = cID.slice(cID.length - 4) + Math.floor(Math.random() * 100);
     socket.emit("leave-room", canvasID);
     setCanvasID(cID);
     let canvasURL = canvasRef.current.toDataURL();
+    console.log("canvasURL: ", canvasURL);
     socket.emit("create-room", cID, canvasURL);
   };
 
@@ -185,13 +210,13 @@ function DrawPage() {
           //setLineOpacity={setLineOpacity}
 
           //sending the object to be able to clear the canvas
-          cvs={canvasRef.current}
+          sendClearCanvas={sendClearCanvas}
+          //cvs={canvasRef.current}
           ID={canvasID}
           generatePublicCanvasID={generatePublicCanvasID}
           turnCanvasPrivate={turnCanvasPrivate}
           joinFriendsCanvas={joinFriendsCanvas}
-
-          UserID = {location.state.userID}
+          UserID={location.state.userID}
           canvasAsString={canvasAsString}
         />
         <canvas
@@ -204,7 +229,11 @@ function DrawPage() {
           height={`620px`}
         />
       </div>
-      <ChatBox userInfo={location.state.fullName} />
+      <div>
+        <ConnectedUserList list={connectedUsers} />
+        <ConnectedUserIcon />
+        <ChatBox userInfo={location.state.fullName} />
+      </div>
     </div>
   );
 }

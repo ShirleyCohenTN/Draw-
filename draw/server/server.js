@@ -122,11 +122,19 @@ io.on("connection", (socket) => {
       activeCanvases.map((canvas) => {
         if (canvas === canvasToJoin) {
           canvas.connected.push(socket.id);
+          canvas.connectedNames.push(socket.data.userFullName);
         }
       });
 
+      let updatedConnectedUsersList = activeCanvases.find(
+        (canvas) => canvas.roomID === roomID
+      ).connectedNames;
       //adding the friend to the canvas
       socket.join(roomID);
+      io.in(roomID).emit(
+        "update-list-of-connected-users",
+        updatedConnectedUsersList
+      );
       console.log(
         socket.id,
         " joined room: " + (roomID == "null" ? "self" : roomID)
@@ -147,6 +155,7 @@ io.on("connection", (socket) => {
         roomID: roomID,
         ctx: ctx,
         connected: [socket.id],
+        connectedNames: [socket.data.userFullName],
       });
       let onlyRoomsArray = activeCanvases.map((activeCanvas) => {
         return activeCanvas.roomID;
@@ -197,10 +206,11 @@ io.on("connection", (socket) => {
         " - "
         //activeCanvases[indexOfActiveCanvases].roomID
       );
-      // console.log(
-      //   "receive-canvas-data: SENDING CTX ",
-      //   indexOfActiveCanvases[0].ctx
-      // );
+      console.log(
+        "receive-canvas-data: SENDING CTX ",
+        indexOfActiveCanvases[0].ctx
+      );
+
       io.to(socket.id).emit(
         "receive-canvas-data",
         indexOfActiveCanvases[0].ctx
@@ -211,5 +221,16 @@ io.on("connection", (socket) => {
   socket.on("leave-room", (roomID) => {
     socket.leave(roomID);
     console.log(socket.id, " left room: " + (roomID == null ? "self" : roomID));
+
+    //TODO: remove disconnected users from activeUsersList
+    //also from the canvas connected list
+  });
+
+  socket.on("send-clear-canvas", (roomID) => {
+    if (roomID) {
+      io.in(roomID).emit("clear-canvas");
+      console.log("canvas clear for room ", roomID);
+    } else io.to(socket.id).emit("clear-canvas");
+    console.log("canvas clear for user ", socket.id);
   });
 });
