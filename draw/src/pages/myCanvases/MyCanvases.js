@@ -7,10 +7,14 @@ import Menu from "../canvas/Menu";
 
 
 var url = "http://localhost:50434/api/canvases";
+var urlToUpload = "http://localhost:50434/api/uploadCanvas";
+
+
 
 function MyCanvases() {
   const [canvases, setCanvases] = useState([]);
    const [canvasesAfterDelete, setCanvasesAfterDelete] = useState([]);
+   const [newCanvasID, setNewCanvasID] = useState(0);
 
    const location = useLocation();
 
@@ -22,7 +26,7 @@ function MyCanvases() {
     // getAllCanvasesByUser();
 
     getAllCanvasesByUser();
-  }, []);
+  }, [newCanvasID]);
 
   const getAllCanvasesByUser = () => {
     fetch(url+ `?user_id=${location.state.UserID}`, {
@@ -86,9 +90,70 @@ function MyCanvases() {
 
 
 
-  const btnDuplicate = (User_ID, Canvas_Path, Canvas_Coordinates) => {
-      console.log("meow")
-  }
+ 
+
+
+
+
+
+
+  const btnDuplicate = async (User_ID, Canvas_Path, Canvas_Coordinates) => {
+    console.log("we are in btnDuplicate")
+    let s = await AddNewCanvas(User_ID, Canvas_Path, Canvas_Coordinates);
+    console.log("returned value=" + s);
+
+    setNewCanvasID(s.Canvas_ID);
+
+    console.log("canvas_id is =" + s.Canvas_ID);
+
+    if (s == null) {
+      alert("הקאנבס לא שוכפל");
+    } else {
+      alert("הקאנבס שוכפל בהצלחה!");
+
+      //navigate('/', {state: {userID : s.User_ID, fullName: s.First_Name + " " + s.Last_Name}})
+    }
+  };
+
+  const AddNewCanvas = async (User_ID, Canvas_Path, Canvas_Coordinates) => {
+    let returnedObj = null;
+
+    let obj2Send = {
+      User_ID: User_ID,
+      Canvas_Path: Canvas_Path,
+      Canvas_Coordinates: Canvas_Coordinates,
+    };
+
+    await fetch(urlToUpload, {
+      method: "POST", // 'GET', 'POST', 'PUT', 'DELETE', etc.
+      body: JSON.stringify(obj2Send),
+      headers: new Headers({
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      }),
+    }) // Call the fetch function passing the url of the API as a parameter
+      .then((resp) => resp.json()) // Transform the data into json
+      .then(function (data) {
+        console.log(data);
+        if (!data.toString().includes("could not insert")) {
+          // console.log(data.email);
+          // console.log(data.pass);
+          returnedObj = data;
+        } else {
+          console.log("didnt inserted!");
+          returnedObj = null;
+        }
+      })
+      .catch(function (err) {
+        alert(err);
+      });
+
+    return returnedObj;
+  };
+
+
+
+
 
 
 
