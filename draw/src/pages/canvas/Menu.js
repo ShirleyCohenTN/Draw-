@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 
 var url = "http://localhost:50434/api/uploadCanvas";
 
+var urlEdit = "http://localhost:50434/api/canvases";
+
+
 const Menu = ({
   setLineColor,
   setLineWidth,
@@ -18,8 +21,11 @@ const Menu = ({
   canvasAsString,
   UserID,
   sendClearCanvas,
+  fullName,
+  Canvas_ID,
 }) => {
   const [newCanvasID, setNewCanvasID] = useState(0);
+
   const test = "tktkt";
   const navigate = useNavigate();
 
@@ -44,19 +50,59 @@ const Menu = ({
   };
 
   const btnSaveCanvas = async () => {
-    let s = await AddNewCanvas(UserID, canvasAsString, test);
-    console.log("returned value=" + s);
+    console.log("Canvas_ID before update = ", Canvas_ID);
 
-    setNewCanvasID(s.Canvas_ID);
+    //here we create a new one
+    if (Canvas_ID === undefined) {
+      let s = await AddNewCanvas(UserID, canvasAsString, test);
+      console.log("returned value=" + s);
 
-    console.log("canvas_id is =" + s.Canvas_ID);
+      setNewCanvasID(s.Canvas_ID);
 
-    if (s == null) {
-      alert("הקאנבס לא נשמר");
-    } else {
-      alert("הקאנבס נשמר בהצלחה!");
+      console.log("canvas_id is =" + s.Canvas_ID);
 
-      //navigate('/', {state: {userID : s.User_ID, fullName: s.First_Name + " " + s.Last_Name}})
+      if (s == null) {
+        alert("הקאנבס לא נשמר");
+      } else {
+        alert("הקאנבס נשמר בהצלחה!");
+
+        //navigate('/', {state: {userID : s.User_ID, fullName: s.First_Name + " " + s.Last_Name}})
+      }
+    } 
+    else 
+    {
+      //here we UPDATE canvas that exists
+      console.log("it not undefiend");
+
+      let obj2Send = {
+        "Canvas_ID": `${Canvas_ID}`,
+        "Canvas_Path": `${canvasAsString}`,
+        "Canvas_Coordinates": `${test}`
+      };
+
+      console.log("obj2Send =" , obj2Send);
+
+      fetch(urlEdit, {
+        method: "PUT", // 'GET', 'POST', 'PUT', 'DELETE', etc.
+        body: JSON.stringify(obj2Send),
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        }),
+      }) // Call the fetch function passing the url of the API as a parameter
+        .then((resp) => {
+          if (resp.status === 200) {
+            console.log("sababa");
+            alert(" עודכן בהצלחה !");
+          } else if (resp.status === 400) {
+            console.log("BadRequest");
+          } else {
+            console.log("NotFound");
+          }
+        }) // Transform the data into json
+        .catch(function (err) {
+          alert(err);
+        });
     }
   };
 
@@ -96,6 +142,58 @@ const Menu = ({
     return returnedObj;
   };
 
+  //   let s = await AddNewCanvas(UserID, canvasAsString, test);
+  //   console.log("returned value=" + s);
+
+  //   setNewCanvasID(s.Canvas_ID);
+
+  //   console.log("canvas_id is =" + s.Canvas_ID);
+
+  //   if (s == null) {
+  //     alert("הקאנבס לא נשמר");
+  //   } else {
+  //     alert("הקאנבס נשמר בהצלחה!");
+
+  //     //navigate('/', {state: {userID : s.User_ID, fullName: s.First_Name + " " + s.Last_Name}})
+  //   }
+  // };
+
+  // const AddNewCanvas = async (UserID, canvasAsString, test) => {
+  //   let returnedObj = null;
+
+  //   let obj2Send = {
+  //     User_ID: UserID,
+  //     Canvas_Path: canvasAsString,
+  //     Canvas_Coordinates: test,
+  //   };
+
+  //   await fetch(url, {
+  //     method: "POST", // 'GET', 'POST', 'PUT', 'DELETE', etc.
+  //     body: JSON.stringify(obj2Send),
+  //     headers: new Headers({
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     }),
+  //   }) // Call the fetch function passing the url of the API as a parameter
+  //     .then((resp) => resp.json()) // Transform the data into json
+  //     .then(function (data) {
+  //       console.log(data);
+  //       if (!data.toString().includes("could not insert")) {
+  //         // console.log(data.email);
+  //         // console.log(data.pass);
+  //         returnedObj = data;
+  //       } else {
+  //         console.log("didnt inserted!");
+  //         returnedObj = null;
+  //       }
+  //     })
+  //     .catch(function (err) {
+  //       alert(err);
+  //     });
+
+  //   return returnedObj;
+  // };
+
   const saveMyCanvas = () => {
     console.log("the string is: ", canvasAsString);
   };
@@ -105,6 +203,7 @@ const Menu = ({
     navigate("/mycanvases", {
       state: {
         UserID: UserID,
+        fullName: fullName,
       },
     });
   };

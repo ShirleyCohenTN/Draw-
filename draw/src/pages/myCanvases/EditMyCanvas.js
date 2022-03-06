@@ -2,13 +2,15 @@ import React, { useCallback } from "react";
 import { useEffect, useRef, useState, useContext } from "react";
 import ChatBox from "../../chat/ChatBox";
 import { SocketContext } from "../../helpingComponents/socket";
-import "./css/DrawPage.css";
-import Menu from "./Menu";
+import "../canvas/css/DrawPage.css";
+import Menu from "../canvas/Menu";
 import { useLocation } from "react-router-dom";
 import ConnectedUserIcon from "../../connectedUsers/ConnectedUserIcon";
 import ConnectedUserList from "../../connectedUsers/ConnectedUsersList";
+import {useNavigate} from "react-router-dom";
 
-function DrawPage() {
+
+function EditMyCanvas() {
   const socket = useContext(SocketContext);
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
@@ -20,6 +22,8 @@ function DrawPage() {
   const [backgroundWhite, setBackgroundWhite] = useState(false);
   const [canvasAsString, setCanvasAsString] = useState("empty string");
   const [connectedUsers, setConnectedUsers] = useState([]);
+  const [isCanvasPathDisplayed, setIsCanvasPathDisplayed] = useState(true);
+
 
   //used for working without DB user
   const fakeLocation = {
@@ -45,6 +49,23 @@ function DrawPage() {
     ctxRef.current = ctx;
     setCanvasAsString(canvas.toDataURL());
 
+
+    
+// sending here the canvas_path image 
+if(isCanvasPathDisplayed)
+{
+    var img = new Image();
+    img.onload = () => {
+      ctxRef.current.drawImage(img, 0, 0);
+    };
+ 
+     img.src =
+      location.state.Canvas_Path;
+
+      setIsCanvasPathDisplayed(false);
+    }
+
+
     //added white background to the canvas, so when we download the canvas image it will not be transparent
     if (backgroundWhite === false) {
       ctx.fillStyle = "white";
@@ -57,7 +78,7 @@ function DrawPage() {
     //socket logic start
     socket.on("connect", () => {
       console.log(`connectionID: ${socket.id}`);
-      socket.emit(`getUserInfo`, location.state.fullName);
+      socket.emit(`getUserInfo`, location.state.fullName); // here i need to add fullname
     });
 
     //socket.on("disconnect", () => {});
@@ -96,8 +117,10 @@ function DrawPage() {
         ctxRef.current.drawImage(img, 0, 0);
       };
       img.src = ctx;
-      // img.src =
-      //   "https://filmfare.wwmindia.com/content/2021/nov/rrr11638189129.jpg";
+    //   img.src =
+    //     "https://filmfare.wwmindia.com/content/2021/nov/rrr11638189129.jpg";
+    //    img.src =
+    //     location.state.Canvas_Path;
       setCtxToSave(ctx);
     });
 
@@ -201,9 +224,9 @@ function DrawPage() {
 
   return (
     <div className="App">
-      <h1>Draw!</h1>
+      <h1>Draw! - Edit Your Canvas</h1>
       <h2>
-        Hello User ID: {location.state.userID} , Name: {location.state.fullName}
+        Hello User ID: {location.state.userID}, {location.state.fullName}
       </h2>
       <div className="draw-area">
         <Menu
@@ -220,8 +243,9 @@ function DrawPage() {
           joinFriendsCanvas={joinFriendsCanvas}
           UserID={location.state.userID}
           canvasAsString={canvasAsString}
-          fullName = {location.state.fullName}
-    
+          Canvas_ID={location.state.Canvas_ID}
+          
+
         />
         <canvas
           id="canvas"
@@ -242,4 +266,4 @@ function DrawPage() {
   );
 }
 
-export default DrawPage;
+export default EditMyCanvas;

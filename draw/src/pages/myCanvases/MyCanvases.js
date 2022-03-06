@@ -3,6 +3,7 @@ import "./css/MyCanvases.css";
 // import delete from '../../images/delete.png';
 import { useLocation } from "react-router-dom";
 import Menu from "../canvas/Menu";
+import {useNavigate} from "react-router-dom";
 
 
 
@@ -15,6 +16,8 @@ function MyCanvases() {
   const [canvases, setCanvases] = useState([]);
    const [canvasesAfterDelete, setCanvasesAfterDelete] = useState([]);
    const [newCanvasID, setNewCanvasID] = useState(0);
+   const navigate = useNavigate();
+
 
    const location = useLocation();
 
@@ -28,6 +31,7 @@ function MyCanvases() {
     getAllCanvasesByUser();
   }, [newCanvasID]);
 
+  //get the list of all the canvases by user id
   const getAllCanvasesByUser = () => {
     fetch(url+ `?user_id=${location.state.UserID}`, {
       method: "GET", // 'GET', 'POST', 'PUT', 'DELETE', etc.
@@ -54,6 +58,8 @@ function MyCanvases() {
       });
   };
 
+
+  //delete canvas
   const btnDelete = (Canvas_ID) => {
     console.log("we're in the delete button");
     console.log("the canvas id is = ", Canvas_ID);
@@ -96,7 +102,7 @@ function MyCanvases() {
 
 
 
-
+//duplicate canvas
   const btnDuplicate = async (User_ID, Canvas_Path, Canvas_Coordinates) => {
     console.log("we are in btnDuplicate")
     let s = await AddNewCanvas(User_ID, Canvas_Path, Canvas_Coordinates);
@@ -153,7 +159,12 @@ function MyCanvases() {
 
 
 
+const btnEdit = (Canvas_ID, User_ID, Canvas_Path, Canvas_Coordinates) => {
+    console.log("we are in btnEdit, canvas id = ", Canvas_ID, " name =", location.state.fullName);
+     navigate('/editcanvases', {state: {
+        Canvas_ID, userID: User_ID, Canvas_Path, Canvas_Coordinates, fullName: location.state.fullName }})
 
+}
 
 
 
@@ -168,7 +179,8 @@ function MyCanvases() {
               <img className="canvas-img" src={item.Canvas_Path} />
 
               <div style={{ display: "block" }}>
-                <button className="button-style">
+                <button className="button-style"
+                onClick={() => btnEdit(item.Canvas_ID ,item.User_ID, item.Canvas_Path, item.Canvas_Coordinates)}>
                   Edit
                   {/* <img style={{width:"30%", display:"inline-block"}} src={require('../../images/delete.png')} /> */}
                 </button>
