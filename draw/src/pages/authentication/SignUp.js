@@ -134,7 +134,7 @@ export default function SignUp() {
       <button className="button-LoginSign" onClick={btnSignUp}>Sign Up </button>
       <div style={{ marginTop: "20px" }}>
         Already have an account?{" "}
-        <Link to="/login" className="link-style">
+        <Link to="/" className="link-style">
           Login here
         </Link>
       </div>
