@@ -6,6 +6,8 @@ import SignUp from "./pages/authentication/SignUp";
 import DrawPage from "./pages/canvas/DrawPage";
 import MyCanvases from "./pages/myCanvases/MyCanvases";
 import EditMyCanvas from "./pages/myCanvases/EditMyCanvas";
+import { Container } from "../../draw/src/pages/authentication/Container";
+import '../src/App.css'
 
 
 function App() {
@@ -13,10 +15,11 @@ function App() {
     // <div>
     //     <HomePage/>
     // </div>
+    <div className="App cfb">
     <SocketContext.Provider value={socket}>
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Container />} />
           <Route path="/drawing" element={<DrawPage />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/mycanvases" element={<MyCanvases />} />
@@ -24,6 +27,7 @@ function App() {
         </Routes>
       </Router>
     </SocketContext.Provider>
+    </div>
   );
 }
 

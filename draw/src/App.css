@@ -1,0 +1,130 @@
+.App{
+	background-image: url("https://previews.123rf.com/images/olegdudko/olegdudko1802/olegdudko180201809/94878830-il-disegno-variopinto-fornisce-la-struttura-sullo-spazio-libero-del-fondo-bianco-disposizione-piana-.jpg?fj=1");
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+    height: 100vh;
+  }
+  
+  /* Quikly Center Everything In Div */
+  .cfb{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Container Styling */
+  .Container{
+    position: relative; 
+  
+    width: 50%;
+    height: 60%;
+  
+    box-shadow: 1px 2px 2px #592941;
+    border: 0.1em solid #592941;
+    border-radius: 0.5em;
+  
+  
+  }
+  
+  /* Banner Side of Container */
+  .banner-side{
+    position: absolute;
+    z-index: 2;
+    right: 65%;
+  
+    border: 0.1em solid #592941;
+    border-radius: 0.5em;
+  
+    width: 35%;
+    height: 100%;
+  
+    flex-direction: column;
+  	background-repeat: no-repeat;
+
+   background-image: url("https://static3.bigstockphoto.com/8/4/2/large1500/248215885.jpg");
+    opacity: 1;
+  
+    color: #EEFCF8;
+    text-align: center;
+  
+    transition: 2s;
+  }
+  
+  /* Form Side of Container */
+  .form-side{
+    position: absolute;
+    z-index: 1;
+    right: 0;
+  
+    border: 0.1em solid #592941;
+    border-radius: 0.5em;
+  
+    width: 65%;
+    height: 100%;
+  
+    background-color: #EEFCF8;
+    opacity: 1;
+  
+    font-weight: bold;
+    color: #035E7B;
+  
+    transition: 2s;
+  }
+  
+  .send-right{
+    right: 0;
+  }
+  
+  .send-left{
+    right: 35%;
+  }
+  
+  
+  /* Layout styling of forms, labels, inputs */
+  .form-comp{
+    flex-direction: column;
+  }
+  
+  .sign-up-form{
+    width: 50%;
+    flex-direction: column;
+  }
+  
+  .sign-up-form > label{
+    padding: 0.5em;
+    width: 100%
+  }
+  
+  .sign-up-form > label > input{
+    width: 100%
+  }
+  
+  
+  /* All Buttons Styling */
+  .buttonAuth {
+    padding: 1em;
+  
+    border: 1px solid #EEFCF8;
+    border-radius: 5em;
+    
+    background-color: #035E7B;
+  
+    color: #EEFCF8;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .buttonAuth:focus {
+    outline: 0;
+  }
+  
+  .buttonAuth:hover{
+    opacity: 0.9;
+  }
+  
+  /* All Inputs Styling */
+  .inputAuth {
+    padding: 0.5em;
+    border: 1px solid #035E7B;
+  }

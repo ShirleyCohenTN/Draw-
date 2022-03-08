@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./css/login.css";
+import '../../App.css';
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -84,61 +84,38 @@ export default function SignUp() {
 
 
   return (
-    <div className="background-image">
-    <div className="login-form">
-      <h2>Sign Up &#128523; </h2>
-      <div className="signup-style">
-        <label className="signup-style">
-          First name
-          <input
-            onChange={(e) => setFirstName(e.target.value)}
-            type="text"
-            placeholder="First name"
-          />
+<div className="form-comp cfb">
+      <h1>Create an Account!</h1>
+      <form className="sign-up-form cfb">
+        <label>
+          First Name:
+          <br/>
+          <input className="inputAuth"        onChange={(e) => setFirstName(e.target.value)}
+            type="text" />
         </label>
-      </div>
-
-      <div className="signup-style">
-        <label className="signup-style">
-          Last name
-          <input
-            onChange={(e) => setLastName(e.target.value)}
-            type="text"
-            placeholder="Last name"
-          />
+        <label>
+          Last Name:
+          <br/>
+          <input className="inputAuth"        onChange={(e) => setLastName(e.target.value)}
+            type="text" />
         </label>
-      </div>
-
-      <div className="signup-style">
-        <label className="signup-style">
-          Email address
-          <input
-            onChange={(e) => setEmail(e.target.value)}
-            type="text"
-            placeholder="Email address"
-          />
+        <label>
+          Email:
+          <br/>
+          <input className="inputAuth"    onChange={(e) => setEmail(e.target.value)}
+            type="text"/>
         </label>
-      </div>
-
-      <div className="signup-style">
-        <label className="signup-style">
-          Password
-          <input
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-            placeholder="Password"
-          />
+        <label>
+          Password:
+          <br/>
+          <input className="inputAuth"        onChange={(e) => setPassword(e.target.value)}
+            type="password"/>
         </label>
-      </div>
-
-      <button className="button-LoginSign" onClick={btnSignUp}>Sign Up </button>
-      <div style={{ marginTop: "20px" }}>
-        Already have an account?{" "}
-        <Link to="/login" className="link-style">
-          Login here
-        </Link>
-      </div>
+        <br/>
+        <button className="buttonAuth"  onClick={btnSignUp}>
+          Sign Up!
+        </button>
+      </form>
     </div>
-  </div>
   );
 }

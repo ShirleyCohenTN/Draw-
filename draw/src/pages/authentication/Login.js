@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import "./css/login.css";
+import '../../App.css';
 import {FaUserAlt} from "react-icons/fa";
 import {Link} from "react-router-dom";
 
@@ -59,46 +59,32 @@ export default function Login() {
     };
 
 
-    return (<div className="background-image">
-        <div className="login-form">
-            <h2>Log In &#128523;
-            </h2>
-            <p>Please login to start drawing! &#128513;
-            </p>
-            <label className="full-width-input">
-                Email
-                <FaUserAlt/>
-                <input // value={this.state.EmailValue}
+    return (    <div className="form-comp cfb">
+    <h1>Sign In!</h1>
+    <form className="sign-up-form cfb">
+      <label>
+        Email:
+        <br/>
+        <input className="inputAuth" // value={this.state.EmailValue}
                     onChange={
                         (e) => setEmail(e.target.value)
                     }
                     type="text"
-                    placeholder="Email"/>
-            </label>
-
-            <label className="full-width-input">
-                Password
-                <input // value={this.state.PasswordValue}
+                    placeholder="Email"/>      </label>
+      <label>
+        Password:
+        <br/>
+        <input className="inputAuth"// value={this.state.PasswordValue}
                     onChange={
                         (e) => setPassword(e.target.value)
                     }
                     type="password"
                     placeholder="Password"/>
-            </label>
-
-            <button type="button" className="button-LoginSign"
-                onClick={btnLogin}>
-                Login
-            </button>
-
-            <div style={
-                {marginTop: "20px"}
-            }>
-                Don't have an account?{" "}
-                <Link to="/signup" className="link-style">
-                    register
-                </Link>
-            </div>
-        </div>
-    </div>);
+      </label>
+      <br/>
+      <button type="button" onClick={btnLogin} className="buttonAuth">
+        Sign In!
+      </button>
+    </form>
+  </div>);
 }
