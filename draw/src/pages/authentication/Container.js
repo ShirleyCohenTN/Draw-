@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 
 // styling
 import '../../App.css'
+import '../authentication/css/login.css'
+
 import Login from './Login';
 import SignUp from './SignUp';
 
