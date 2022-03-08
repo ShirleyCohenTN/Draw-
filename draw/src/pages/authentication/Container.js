@@ -10,7 +10,7 @@ import SignUp from './SignUp';
 
 
 export const Container = () => {
-  const [welcome, setWelcome] = useState(false)
+  const [welcome, setWelcome] = useState(true)
 
   const setBannerClass = () => {
     const classArr = ["banner-side cfb"]
