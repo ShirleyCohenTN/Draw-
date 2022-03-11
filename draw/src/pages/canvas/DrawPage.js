@@ -203,7 +203,8 @@ function DrawPage() {
     <div className="App">
       <h1>Draw!</h1>
       <h2>
-        Hello User ID: {location.state.userID} , Name: {location.state.fullName}
+  Hello {location.state.fullName}
+
       </h2>
       <div className="draw-area">
         <Menu

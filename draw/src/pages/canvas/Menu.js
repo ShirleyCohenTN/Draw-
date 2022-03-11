@@ -210,14 +210,14 @@ const Menu = ({
 
   return (
     <div className="Menu">
-      <label>Brush Color </label>
+    
       <input
         type="color"
         onChange={(e) => {
           setLineColor(e.target.value);
         }}
       />
-      <label>Brush Width </label>
+    
       <input
         type="range"
         min="3"

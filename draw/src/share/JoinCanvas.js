@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import '../pages/canvas/css/DrawPage.css'
 
 function JoinCanvas(props) {
   const [canvasToJoin, setCanvasToJoin] = useState("");
@@ -14,13 +15,12 @@ function JoinCanvas(props) {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Join Canvas
-          <input type="text" value={canvasToJoin} onChange={handleChange} />
-        </label>
-        <input type="submit" value="Join" />
+    <div style={{justifyContent:'center'}}>
+      <form onSubmit={handleSubmit} className="joinContainer">
+ 
+          <input style={{marginBottom:'10px',backgroundColor:'#55c959',marginRight:'5px'}} type="text" value={canvasToJoin} onChange={handleChange} />
+    
+        <input className="inpBtn"  type="submit" value="Join Canvas" />
       </form>
     </div>
   );
