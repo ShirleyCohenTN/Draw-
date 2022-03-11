@@ -60,8 +60,6 @@ function DrawPage() {
       socket.emit(`getUserInfo`, location.state.fullName);
     });
 
-    //socket.on("disconnect", () => {});
-
     socket.on("receive-draw", (drawXY, senderID) => {
       console.log("draw:", drawXY, senderID);
       let drawFrom = senders[senderID];
@@ -179,11 +177,12 @@ function DrawPage() {
   const generatePublicCanvasID = () => {
     let cID = "" + socket.id;
     cID = cID.slice(cID.length - 4) + Math.floor(Math.random() * 100);
-    socket.emit("leave-room", canvasID);
-    setCanvasID(cID);
+
     let canvasURL = canvasRef.current.toDataURL();
     console.log("canvasURL: ", canvasURL);
     socket.emit("create-room", cID, canvasURL);
+    socket.emit("leave-room", canvasID);
+    setCanvasID(cID);
   };
 
   const turnCanvasPrivate = () => {
@@ -193,10 +192,14 @@ function DrawPage() {
   };
 
   const joinFriendsCanvas = (ID) => {
-    socket.emit("leave-room", canvasID);
-    setCanvasID(ID);
-    socket.emit("join-room", ID);
-    socket.emit("get-canvas-data", ID);
+    socket.emit("room-exist", ID, (answer) => {
+      if (answer) {
+        socket.emit("leave-room", canvasID);
+        setCanvasID(ID);
+        socket.emit("join-room", ID);
+        socket.emit("get-canvas-data", ID);
+      }
+    });
   };
 
   return (
@@ -220,8 +223,7 @@ function DrawPage() {
           joinFriendsCanvas={joinFriendsCanvas}
           UserID={location.state.userID}
           canvasAsString={canvasAsString}
-          fullName = {location.state.fullName}
-    
+          fullName={location.state.fullName}
         />
         <canvas
           id="canvas"
