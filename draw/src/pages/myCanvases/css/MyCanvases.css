@@ -12,33 +12,62 @@
   margin: 0px;
 }
 
-body {
-  background-color: #dbddf1;
-}
+/* body {
+  background-color: #a7d1f3;
+} */
 
 .button-style {
-  width: 25%;
+  /* width: 25%;
   margin: 2%;
   font-weight: "bold";
   background-color: lightblue;
-  height: 20px;
+  height: 20px; */
+
+
+  width: 25%;
+  height: 21px;
+  margin: 2%;
+  font-family: "Arial Black", Gadget, sans-serif;
+  text-align: center;
+  transition: 0.5s;
+  /* background-size: 200% auto; */
+  color: white;
+  box-shadow: 0 0 20px rgb(0, 0, 0);
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.12), 0 1px 2px rgba(0,0,0,0.24);
+  cursor: pointer;
+  display: inline-block;
+  background-color: rgb(62, 148, 228);
+  /* background-image: linear-gradient(to right, #88e99d 0%, #e7eb9d 51%, #5cd5f3 100%); */
+  /* background-image: linear-gradient(to right, #00d2ff 0%, #3a7bd5 51%, #00d2ff 100%); */
+  -webkit-text-stroke: 0.1px black;
+
 }
 
 .button-style:hover {
-  background-color: green;
+  /* background-color: green;
   color: white;
-  height: 25px;
+  height: 25px; */
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  background-position: right center;
+  background-color: green;
+  /* background-image: linear-gradient(to right, #1fb640 0%, #EAECC6 51%, #2be444 100%); */
+  color:white;
 }
 
 .div-style {
-  background-color: gray;
+  background-color: rgb(203, 228, 215);
+  background-image: url("https://png.pngtree.com/thumb_back/fh260/back_pic/03/73/16/9257b9c49715f3f.jpg") ;
+  /* background: radial-gradient(ellipse at left top, #a1f1ff 5%, #2db3d4 25%, #23589e 50%, #6362c4 100%); */
   width: 25%;
   padding: 1%;
   float: left;
-  border: solid 2px green;
+  border: solid 2px rgb(0, 0, 0);
   margin: 0.5%;
   margin-left: 4%;
   display: "inline-block";
+  border-radius: 8px;
+  border-style: groove;
 }
 
 .canvas-img {
@@ -50,4 +79,71 @@ body {
   /* //margin-left:"4%"; */
   display: "block";
   margin-right: 5%;
+  border-style: groove;
+
 }
+
+
+.h2-header-myCanvases{
+    color: white;
+    text-shadow: 1px 1px 2px black, 0 0 25px rgb(234, 0, 255), 0 0 5px darkblue;
+    text-align: center;
+    font-family: 'Assistant', cursive;
+    margin-bottom:1%;
+    margin-top:1%;
+    font-size: 30px;
+}
+
+
+/* CSS */
+.button-71 {
+  background-color: #0078d0;
+  border: 0;
+  border-radius: 56px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: system-ui,-apple-system,system-ui,"Segoe UI",Roboto,Ubuntu,"Helvetica Neue",sans-serif;
+  /* font-size: 18px; */
+  font-weight: 600;
+  outline: 0;
+  /* padding: 16px 21px; */
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: all .3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-71:before {
+  background-color: initial;
+  background-image: linear-gradient(#fff 0, rgba(255, 255, 255, 0) 100%);
+  border-radius: 125px;
+  content: "";
+  height: 25px;
+  left: 4%;
+  opacity: .5;
+  position: absolute;
+  top: 0;
+  transition: all .3s;
+  width: 20%;
+}
+
+.button-71:hover {
+  box-shadow: rgba(255, 255, 255, .2) 0 3px 15px inset, rgba(0, 0, 0, .1) 0 3px 5px, rgba(0, 0, 0, .1) 0 10px 13px;
+  transform: scale(1.05);
+}
+
+@media (min-width: 768px) {
+  .button-71 {
+    width: 25%;
+  height: 21px;
+  margin: 2%;
+  }
+}
+
+
+
+

@@ -6,16 +6,15 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  /* justify-content: flex-start; */
   align-items: center;
-  background-image: linear-gradient(
-    120deg, #f573f5 0%, #f8f411 100%);
+
 }
   
 h1 {
   font-family: 'Assistant', cursive;
   font-size: 50px;
-  color: whitesmoke
+  color: rgb(36, 35, 35)
   
 }
   
@@ -34,7 +33,7 @@ h1 {
   justify-content: space-evenly;
   border-radius: 1px;
   align-items: center;
-  background-color: #2f3ce92d;
+  background-image: url("https://previews.123rf.com/images/klss/klss1708/klss170800157/84410735-exciting-3d-rendering-of-colorful-particles-on-a-light-blue-background-with-splashing-white-places-t.jpg");
   margin: auto;
   margin-top: 2px;
   font-family: "arial";
@@ -44,12 +43,19 @@ h1 {
 
 }
 
+.joinContainer{
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
 .Menu button{
     border-radius: 80px;
     background-color: rgb(20, 158, 27);
     font-weight: bold;
     cursor: pointer;
-    color:whitesmoke;
+    color:white;
     margin:1%;
     width:20%;
     
@@ -64,5 +70,22 @@ h1 {
   
 }
 
+.inpBtn{
+  position: absolute;
+  font-size: 15px;
+  font-weight: bold;
+  width: 140px;
+  margin-top: 35px;
+  align-self: center;
+  border-radius: 7px;
+  background-color: rgb(33, 61, 216);
+  color:white;
+}
 
-
+.inpBtn:hover{
+  font-weight: bold;
+  cursor: pointer;
+  background-color:#3fe1e7 ;
+  color: rgb(56, 6, 18);
+  
+}

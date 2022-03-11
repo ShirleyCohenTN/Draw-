@@ -26,7 +26,7 @@ class ChatView extends React.Component {
 
   render() {
     return (
-      <div style={{ height: 100, background: "white" }}>
+      <div style={{ height: 100, background: "white" ,maxHeight:'150px',overflow:'auto' }}>
         {this.mapElements()}
       </div>
     );
