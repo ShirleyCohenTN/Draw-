@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import '../../App.css';
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { Formik } from "formik";
 
 
 
@@ -183,7 +182,6 @@ export default function SignUp() {
   };
 
   return (
-  <Formik>
 <div className="form-comp cfb">
       <h1>Create an Account!</h1>
       <form className="sign-up-form cfb">
@@ -228,7 +226,6 @@ export default function SignUp() {
         </button>
       </form>
     </div>
-    </Formik>
 
   );
 }
