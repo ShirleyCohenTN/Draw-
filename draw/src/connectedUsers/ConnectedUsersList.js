@@ -12,13 +12,18 @@ function ConnectedUserList({ list }) {
   if (list.length < 1) {
     return (
       <div>
-        <h2>no one connected</h2>
+        {/* <h2>no one connected</h2> */}
+        <ConnectedUserIcon key={0} nameOfUser={"YOU"} />
       </div>
     );
   }
   return (
-    <div style={{ display: "flex", "flex-direction": "row" }}>
-      <h2>connected:</h2>
+    <div
+      style={{
+        display: "flex",
+        "flex-direction": "row",
+      }}
+    >
       {mapElements()}
     </div>
   );

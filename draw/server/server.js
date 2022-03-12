@@ -8,14 +8,28 @@ var onlineUsers = [];
 var activeCanvases = [];
 
 const reportLog = () => {
+  let activeCanvasesForLog = activeCanvases.map((canvas) => {
+    return {
+      host: canvas.host,
+      canvasID: canvas.roomID,
+      ctx: "length: " + canvas.ctx.length,
+      connected: canvas.connected,
+      connectedNames: canvas.connectedNames,
+    };
+  });
   console.clear();
   console.log(":::::::::::::: LOG ::::::::::::::");
-  console.log("onlineUsers[]: ", onlineUsers);
-  console.log("activeCanvases[]: ", activeCanvases);
+  console.log("onlineUsers[", onlineUsers.length, "]: ", onlineUsers);
+  console.log(
+    "activeCanvases[",
+    activeCanvasesForLog.length,
+    "]: ",
+    activeCanvasesForLog
+  );
 };
 
-const addUserToOnlineUsersArray = (socketID) => {
-  onlineUsers.push(socketID);
+const addUserToOnlineUsersArray = (socket) => {
+  onlineUsers.push(socket.id);
 };
 
 //remove disconnected users from onlineUsers
@@ -121,7 +135,7 @@ const addCanvasToActiveCanvasesArray = (socket, roomID, ctx) => {
 
 //listening to port connections
 io.on("connection", (socket) => {
-  addUserToOnlineUsersArray(socket.id);
+  addUserToOnlineUsersArray(socket);
 
   //listening on port disconnection
   socket.on("disconnect", (reason) => {
@@ -164,7 +178,8 @@ io.on("connection", (socket) => {
   socket.on("send-end", (canvasID, canvasCurrent) => {
     if (canvasID) io.to(canvasID).emit("receive-end");
     else io.to(socket.id).emit("receive-end");
-    console.log(socket.id, ": END ", canvasID);
+
+    reportLog();
 
     //update canvas after every line draw
     saveCurrentCanvas(canvasID, canvasCurrent);

@@ -1,14 +1,15 @@
 import React from "react";
-import {useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { SocketContext } from "../helpingComponents/socket";
 
-function ChatWrite({userInfo}) {
+function ChatWrite({ userInfo }) {
   const socket = useContext(SocketContext);
   const [chatMassage, setChatMassage] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    socket.emit("send-chat", userInfo+': '+chatMassage);
+    socket.emit("send-chat", userInfo + ": " + chatMassage);
+    setChatMassage("");
   };
 
   const handleChange = (e) => {
@@ -18,11 +19,22 @@ function ChatWrite({userInfo}) {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label>
-          massage:
-          <input type="text" value={chatMassage} onChange={handleChange} />
-        </label>
-        <input type="submit" value="Submit" />
+        <input
+          style={{
+            width: "100%",
+            height: 40,
+            border: "none",
+            borderTopStyle: "solid",
+            borderTopWidth: 2,
+            borderTopColor: "gray",
+          }}
+          type="text"
+          placeholder="Write Something"
+          value={chatMassage}
+          onChange={handleChange}
+        />
+
+        {/* <input type="submit" value="Submit" /> */}
       </form>
     </div>
   );

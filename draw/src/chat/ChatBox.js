@@ -2,12 +2,11 @@ import React from "react";
 import ChatView from "./ChatView";
 import ChatWrite from "./ChatWrite";
 
-function ChatBox({userInfo}) {
-
+function ChatBox({ userInfo }) {
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <ChatView />
-      <ChatWrite userInfo={userInfo}/>
+      <ChatWrite userInfo={userInfo} />
     </div>
   );
 }

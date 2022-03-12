@@ -205,10 +205,7 @@ function DrawPage() {
   return (
     <div className="App">
       <h1>Draw!</h1>
-      <h2>
-  Hello {location.state.fullName}
-
-      </h2>
+      <h2>Hello {location.state.fullName}</h2>
       <div className="draw-area">
         <Menu
           setLineColor={setLineColor}
@@ -235,11 +232,34 @@ function DrawPage() {
           width={`1200px`}
           height={`620px`}
         />
-      </div>
-      <div>
-        <ConnectedUserList list={connectedUsers} />
-        <ConnectedUserIcon />
-        <ChatBox userInfo={location.state.fullName} />
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "right",
+            justifySelf: "right",
+            marginLeft: "auto",
+            marginTop: 33,
+          }}
+        >
+          <ConnectedUserList list={connectedUsers} />
+          <div
+            style={{
+              display: "flex",
+              width: "30%",
+              borderColor: "purple",
+              borderWidth: 2,
+              borderStyle: "solid",
+              padding: 10,
+              backgroundColor: "white",
+              borderTopColor: "white",
+              borderBottomRightRadius: 25,
+              marginRight: -2,
+            }}
+          >
+            <ChatBox userInfo={location.state.fullName} />
+          </div>
+        </div>
       </div>
     </div>
   );
