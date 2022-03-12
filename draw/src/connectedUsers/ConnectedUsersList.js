@@ -12,7 +12,8 @@ function ConnectedUserList({ list }) {
   if (list.length < 1) {
     return (
       <div>
-        <h2>no one connected</h2>
+        {/* <h2>no one connected</h2> */}
+        <ConnectedUserIcon key={0} nameOfUser={"YOU"} />
       </div>
     );
   }

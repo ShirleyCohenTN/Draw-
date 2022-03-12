@@ -1,23 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Icon from "@mdi/react";
-import { mdiPalette } from "@mdi/js";
+import { mdiPalette, mdiAccountTie } from "@mdi/js";
 
-//spin
 function ConnectedUserIcon({ nameOfUser }) {
-  const randomColor = () => {
-    return Math.floor(Math.random() * 255) + 0;
-  };
+  const [randomColor, setRandomColor] = useState(null);
+
+  useEffect(() => {
+    setRandomColor("#" + Math.floor(Math.random() * 16777215).toString(16));
+  }, []);
 
   return (
-    <div style={{ margin: 20, backgroundColor: "pink" }}>
+    <div
+      style={{
+        margin: 20,
+        padding: 15,
+        backgroundColor: "white",
+        borderWidth: 2,
+        borderColor: "black",
+        borderStyle: "solid",
+        borderRadius: 20,
+      }}
+    >
       <Icon
-        style={{ justifyContent: "center" }}
-        path={mdiPalette}
+        style={{
+          marginLeft: "18%",
+          borderWidth: 5,
+          borderColor: "black",
+          //borderStyle: "solid",
+          borderRadius: 50,
+        }}
+        path={mdiAccountTie}
         size={2}
-        color="#fff"
-        spin
+        color={randomColor}
       />
-      <h2>{nameOfUser}</h2>
+      <h3 style={{ textAlign: "center" }}>{nameOfUser}</h3>
     </div>
   );
 }

@@ -60,8 +60,6 @@ function DrawPage() {
       socket.emit(`getUserInfo`, location.state.fullName);
     });
 
-    //socket.on("disconnect", () => {});
-
     socket.on("receive-draw", (drawXY, senderID) => {
       console.log("draw:", drawXY, senderID);
       let drawFrom = senders[senderID];
@@ -185,11 +183,12 @@ function DrawPage() {
   const generatePublicCanvasID = () => {
     let cID = "" + socket.id;
     cID = cID.slice(cID.length - 4) + Math.floor(Math.random() * 100);
-    socket.emit("leave-room", canvasID);
-    setCanvasID(cID);
+
     let canvasURL = canvasRef.current.toDataURL();
     console.log("canvasURL: ", canvasURL);
     socket.emit("create-room", cID, canvasURL);
+    socket.emit("leave-room", canvasID);
+    setCanvasID(cID);
   };
 
   const turnCanvasPrivate = () => {
@@ -199,19 +198,20 @@ function DrawPage() {
   };
 
   const joinFriendsCanvas = (ID) => {
-    socket.emit("leave-room", canvasID);
-    setCanvasID(ID);
-    socket.emit("join-room", ID);
-    socket.emit("get-canvas-data", ID);
+    socket.emit("room-exist", ID, (answer) => {
+      if (answer) {
+        socket.emit("leave-room", canvasID);
+        setCanvasID(ID);
+        socket.emit("join-room", ID);
+        socket.emit("get-canvas-data", ID);
+      }
+    });
   };
 
   return (
     <div className="App">
       <h1>Draw!</h1>
-      <h2>
-  Hello {location.state.fullName}
-
-      </h2>
+      <h2>Hello {location.state.fullName}</h2>
       <div className="draw-area">
         <Menu
           setLineColor={setLineColor}
@@ -227,8 +227,7 @@ function DrawPage() {
           joinFriendsCanvas={joinFriendsCanvas}
           UserID={location.state.userID}
           canvasAsString={canvasAsString}
-          fullName = {location.state.fullName}
-    
+          fullName={location.state.fullName}
         />
         <canvas
           id="canvas"
@@ -239,11 +238,34 @@ function DrawPage() {
           width={`1200px`}
           height={`620px`}
         />
-      </div>
-      <div>
-        <ConnectedUserList list={connectedUsers} />
-        <ConnectedUserIcon />
-        <ChatBox userInfo={location.state.fullName} />
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "right",
+            justifySelf: "right",
+            marginLeft: "auto",
+            marginTop: 33,
+          }}
+        >
+          <ConnectedUserList list={connectedUsers} />
+          <div
+            style={{
+              display: "flex",
+              width: "30%",
+              borderColor: "purple",
+              borderWidth: 2,
+              borderStyle: "solid",
+              padding: 10,
+              backgroundColor: "white",
+              borderTopColor: "white",
+              borderBottomRightRadius: 25,
+              marginRight: -2,
+            }}
+          >
+            <ChatBox userInfo={location.state.fullName} />
+          </div>
+        </div>
       </div>
     </div>
   );
