@@ -206,6 +206,8 @@ io.on("connection", (socket) => {
         " - "
         //activeCanvases[indexOfActiveCanvases].roomID
       );
+      if(indexOfActiveCanvases!==undefined)
+      {
       console.log(
         "receive-canvas-data: SENDING CTX ",
         indexOfActiveCanvases[0].ctx
@@ -215,6 +217,8 @@ io.on("connection", (socket) => {
         "receive-canvas-data",
         indexOfActiveCanvases[0].ctx
       );
+      }
+     
     }
   });
 

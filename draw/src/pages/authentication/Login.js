@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import '../../App.css';
 import {FaUserAlt} from "react-icons/fa";
@@ -11,7 +11,21 @@ var url = "http://localhost:50434/api/users";
 export default function Login() {
     const [Email, setEmail] = useState("");
     const [Password, setPassword] = useState("");
+    const [errorDesignEmail,setErrorDesignEmail]=useState("1");
+    const [errorDesignPassword,setErrorDesignPass]=useState("2");
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if(Email!==null||Email!=="")
+        {
+            setErrorDesignEmail("1")
+        }
+        if(Password!==null||Password!=="")
+        {
+            setErrorDesignPass("2")
+        }
+      },[Email,Password]);
+
     const btnLogin = async () => {
         console.log(1);
         console.log(Email + "," + Password);
@@ -53,11 +67,28 @@ export default function Login() {
             }
         } catch (e) {
             console.log("Error Login", e);
-            alert("lo mevin");
+            alert("שגיאת התחברות");
         }
 
     };
 
+    const chkFields=()=>{
+        let flag=false
+        if(Email===null||Email==="")
+        {
+         setErrorDesignEmail("errorDesign")
+         flag=true;
+        }
+        if(Password===null||Password==="")
+        {
+        setErrorDesignPass("errorDesign")
+        flag=true;
+        }
+        if(!flag)
+        {
+          btnLogin()
+        }
+    }
 
     return (    <div className="form-comp cfb">
     <h1>Sign In!</h1>
@@ -65,7 +96,7 @@ export default function Login() {
       <label>
         Email:
         <br/>
-        <input className="inputAuth" // value={this.state.EmailValue}
+        <input id={errorDesignEmail} className="inputAuth" // value={this.state.EmailValue}
                     onChange={
                         (e) => setEmail(e.target.value)
                     }
@@ -74,7 +105,7 @@ export default function Login() {
       <label>
         Password:
         <br/>
-        <input className="inputAuth"// value={this.state.PasswordValue}
+        <input  id={errorDesignPassword} className="inputAuth"// value={this.state.PasswordValue}
                     onChange={
                         (e) => setPassword(e.target.value)
                     }
@@ -82,7 +113,7 @@ export default function Login() {
                     placeholder="Password"/>
       </label>
       <br/>
-      <button type="button" onClick={btnLogin} className="buttonAuth">
+      <button type="button" onClick={chkFields} className="buttonAuth">
         Sign In!
       </button>
     </form>

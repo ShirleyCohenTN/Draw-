@@ -161,6 +161,8 @@ function DrawPage() {
   };
 
   const clearCanvas = () => {
+    if(canvasRef.current)
+    {
     ctxRef.current.fillStyle = "white";
     ctxRef.current.fillRect(
       0,
@@ -168,6 +170,10 @@ function DrawPage() {
       canvasRef.current.width,
       canvasRef.current.height
     );
+    }
+    else{
+      console.log('canvas ref is undefined or null so cant be deleted')
+    }
     console.log("ClearCanvas() was activated");
   };
 

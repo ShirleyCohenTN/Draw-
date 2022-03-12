@@ -17,7 +17,7 @@ function ConnectedUserList({ list }) {
     );
   }
   return (
-    <div style={{ display: "flex", "flex-direction": "row" }}>
+    <div style={{ display: "flex", flexDirection: "row" }}>
       <h2>connected:</h2>
       {mapElements()}
     </div>

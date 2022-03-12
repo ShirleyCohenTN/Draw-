@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import '../../App.css';
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { Formik } from "formik";
 
 
 
@@ -16,6 +17,23 @@ export default function SignUp() {
   const [LastName, setLastName] = useState(null);
   const [UserID, setUserID] = useState(0);
   const [Password, setPassword] = useState(null);
+  const [ConfirmPassword, setConfirmPassword] = useState(null);
+
+  // הוספת עיצוב של שגיאה לשדה הרצוי
+  const [errorDesignFirst,setErrorDesignFirst]=useState("1");
+  const [errorDesignLast,setErrorDesignLast]=useState("2");
+  const [errorDesignEmail,setErrorDesignEmail]=useState("3");
+  const [errorDesignPassword,setErrorDesignPass]=useState("4");
+  const [errorDesignConfirmPassword,setErrorDesignConfirmPassword]=useState("5");
+
+  
+// הוספת הודעת שגיאה לשדה הרצוי
+  const [errorFirst,setErrorFirst]=useState("");
+  const [errorLast,setErrorLast]=useState("");
+  const [errorEmail,setErrorEmail]=useState("");
+  const [errorPassword,setErrorPassword]=useState("");
+  const [errorConfirmPassword,setErrorConfirmPassword]=useState("");
+
   const navigate = useNavigate();
 
 
@@ -36,7 +54,7 @@ export default function SignUp() {
       alert("didnt insert into db!");
     } else {
       alert("נרשמת בהצלחה!");
-
+      window.location.reload()
       navigate('/', {state: {userID : s.User_ID, fullName: s.First_Name + " " + s.Last_Name}})
 
     }
@@ -81,41 +99,136 @@ export default function SignUp() {
 
 
 
+  const validateForm = () => {
+    let pattern =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let mailChk= pattern.test(String(Email).toLowerCase());
+     pattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,14}/;
 
+    let passChk = pattern.test(String(Password));
+    if(FirstName!==null&&LastName!==null&&mailChk===true&&passChk===true&&Password===ConfirmPassword)
+    {
+      setErrorDesignFirst("")
+      setErrorFirst('')
+      setErrorDesignLast("")
+      setErrorLast('')
+      setErrorDesignEmail("")
+      setErrorEmail('')
+      setErrorPassword('')
+      setErrorDesignPass("")
+      setErrorConfirmPassword('')
+      setErrorDesignConfirmPassword('')
+      btnSignUp()
+
+    }
+    if(FirstName===null||FirstName==="")
+    {
+      setErrorDesignFirst("errorDesign")
+      setErrorFirst('First Name required!!')
+    }
+    else{
+      setErrorDesignFirst("0")
+      setErrorFirst('')
+    }
+    if(LastName===null||LastName==="")
+    {
+      setErrorDesignLast("errorDesign")
+      setErrorLast('Last Name required!!')
+    }
+    else{
+      setErrorDesignLast("1")
+      setErrorLast('')
+    }
+    if(mailChk!==true)
+    {
+      setErrorDesignEmail("errorDesign")
+      setErrorEmail('invalid email adress')
+    }
+    else{
+      setErrorDesignEmail("2")
+      setErrorEmail('')
+    }
+    if(passChk!==true)
+    {
+      if(Password===null||Password==="")
+      setErrorPassword('Password required!!')
+      else
+      setErrorPassword('required:letters,numbers,8 characters long!!')
+      setErrorDesignPass("errorDesign")
+    }
+    else{
+      setErrorPassword('')
+      setErrorDesignPass("3")
+    }
+    if(Password!==ConfirmPassword)
+    {
+      if(ConfirmPassword===null||ConfirmPassword==="")
+      setErrorConfirmPassword('confirmation required!!')
+      else
+      setErrorConfirmPassword('passwords dont match!')
+      setErrorDesignConfirmPassword('errorDesign')
+    }
+    else{
+      setErrorConfirmPassword('')
+      setErrorDesignConfirmPassword('4')
+    }
+  //   if(passChk===true&&mailChk===true&&FirstName!=null&&LastName!=null)
+  //   {
+  //   setMsg("")
+
+  //   }
+  //  else
+  //  setMsg('Error,wrong entries or not full')
+    
+  };
 
   return (
+  <Formik>
 <div className="form-comp cfb">
       <h1>Create an Account!</h1>
       <form className="sign-up-form cfb">
         <label>
           First Name:
           <br/>
-          <input className="inputAuth"        onChange={(e) => setFirstName(e.target.value)}
+          <input id={errorDesignFirst} className="inputAuth"     onChange={(e) => setFirstName(e.target.value)}
             type="text" />
         </label>
+        <div style={{ fontSize: 15, color: "red" }}>{errorFirst}</div>
         <label>
           Last Name:
           <br/>
-          <input className="inputAuth"        onChange={(e) => setLastName(e.target.value)}
+          <input id={errorDesignLast} className="inputAuth"        onChange={(e) => setLastName(e.target.value)}
             type="text" />
         </label>
+        <div style={{ fontSize: 15, color: "red" }}>{errorLast}</div>
         <label>
           Email:
           <br/>
-          <input className="inputAuth"    onChange={(e) => setEmail(e.target.value)}
+          <input id={errorDesignEmail} className="inputAuth"    onChange={(e) => setEmail(e.target.value)}
             type="text"/>
         </label>
+        <div style={{ fontSize: 15, color: "red" }}>{errorEmail}</div>
         <label>
           Password:
           <br/>
-          <input className="inputAuth"        onChange={(e) => setPassword(e.target.value)}
+          <input id={errorDesignPassword} className="inputAuth"        onChange={(e) => setPassword(e.target.value)}
             type="password"/>
         </label>
+        <div style={{ fontSize: 15, color: "red" }}>{errorPassword}</div>
+        <label>
+         Confirm Password:
+          <br/>
+          <input id={errorDesignConfirmPassword} className="inputAuth"        onChange={(e) => setConfirmPassword(e.target.value)}
+            type="password"/>
+        </label>
+        <div style={{ fontSize: 15, color: "red" }}>{errorConfirmPassword}</div>
         <br/>
-        <button className="buttonAuth"  onClick={btnSignUp}>
+        <button type="button" className="buttonAuth"  onClick={validateForm}>
           Sign Up!
         </button>
       </form>
     </div>
+    </Formik>
+
   );
 }
