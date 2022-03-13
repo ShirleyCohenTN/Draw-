@@ -58,6 +58,8 @@
 .div-style {
   background-color: rgb(203, 228, 215);
   background-image: url("https://png.pngtree.com/thumb_back/fh260/back_pic/03/73/16/9257b9c49715f3f.jpg") ;
+  background-size: cover;
+
   /* background: radial-gradient(ellipse at left top, #a1f1ff 5%, #2db3d4 25%, #23589e 50%, #6362c4 100%); */
   width: 25%;
   padding: 1%;
@@ -142,6 +144,13 @@
   height: 21px;
   margin: 2%;
   }
+}
+
+.deleting{
+background-color: red;
+}
+.duplicating{
+background-color: rgb(231, 42, 175);
 }
 
 
