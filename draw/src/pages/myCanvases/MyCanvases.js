@@ -179,21 +179,21 @@ const btnEdit = (Canvas_ID, User_ID, Canvas_Path, Canvas_Coordinates) => {
               <img className="canvas-img" src={item.Canvas_Path} />
 
               <div style={{ display: "block" }}>
-                <button className="button-71"
+                <button className="button-71 editing"
                 onClick={() => btnEdit(item.Canvas_ID ,item.User_ID, item.Canvas_Path, item.Canvas_Coordinates)}>
                   Edit
                   {/* <img style={{width:"30%", display:"inline-block"}} src={require('../../images/delete.png')} /> */}
                 </button>
 
                 <button
-                  className="button-71"
+                  className="button-71 deleting"
                   onClick={() => btnDelete(item.Canvas_ID)}
                 >
                   Delete
                   {/* <img style={{width:"30%", display:"inline-block"}} src={require('../../images/delete.png')} /> */}
                 </button>
 
-                <button className="button-71"
+                <button className="button-71 duplicating"
                 onClick={() => btnDuplicate(item.User_ID, item.Canvas_Path, item.Canvas_Coordinates)}>
                   Duplicate
                   {/* <img style={{width:"30%", display:"inline-block"}} src={require('../../images/delete.png')} /> */}
