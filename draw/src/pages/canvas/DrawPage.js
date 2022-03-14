@@ -233,6 +233,7 @@ function DrawPage() {
           id="canvas"
           onMouseDown={startDrawing}
           onMouseUp={endDrawing}
+          onMouseLeave={endDrawing}
           onMouseMove={draw}
           ref={canvasRef}
           width={`1200px`}
