@@ -8,6 +8,8 @@ class ChatView extends React.Component {
       chatMessages: [],
     };
 
+
+
     this.socket = socket;
 
     socket.on("receive-chat", (sender, text) => {

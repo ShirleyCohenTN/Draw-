@@ -108,6 +108,8 @@
     color: #EEFCF8;
     font-weight: bold;
     text-decoration: none;
+
+    cursor: pointer;
   }
   
   .buttonAuth:focus {

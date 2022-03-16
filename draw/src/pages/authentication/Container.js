@@ -32,8 +32,8 @@ export const Container = () => {
     <div className={setBannerClass()}> 
 
       {welcome ? 
-        <h2 style={{fontWeight:'bold',color:'black'}}>Hello, New Friend!</h2>
-          : <h2 style={{color:'black'}}>Welcome Back</h2>}
+        <h2 style={{fontWeight:'bold',color:'white'}}>Hello, New Friend!</h2>
+          : <h2 style={{color:'white'}}>Welcome Back</h2>}
 
       <button className="buttonAuth" onClick={()=> setWelcome(!welcome)}>
         {welcome ?
