@@ -89,7 +89,7 @@ const failedJoinRoom = () => {
   console.log("failedJoinRoom");
 };
 
-const removeUserFromConnectedArray = (socket, room) => {
+const removeUserFromConnectedArray = (socket) => {
   let inxOfCanvas = -1;
   let inxOfUser = -1;
   activeCanvases.forEach((canvas, index) => {
@@ -99,11 +99,14 @@ const removeUserFromConnectedArray = (socket, room) => {
     }
     console.log("values: ", inxOfUser, " ", inxOfCanvas);
   }, socket);
-  console.log(activeCanvases[inxOfCanvas].connectedNames);
-  activeCanvases[inxOfCanvas].connected.splice(inxOfUser, 1);
-  activeCanvases[inxOfCanvas].connectedNames.splice(inxOfUser, 1);
-  console.log(activeCanvases[inxOfCanvas].connected);
-  removeInactiveCanvas();
+  if (inxOfCanvas != -1 && inxOfUser != -1) {
+    console.log(activeCanvases[inxOfCanvas].connectedNames);
+    activeCanvases[inxOfCanvas].connected.splice(inxOfUser, 1);
+    activeCanvases[inxOfCanvas].connectedNames.splice(inxOfUser, 1);
+    console.log(activeCanvases[inxOfCanvas].connected);
+    removeInactiveCanvas();
+  } else {
+  }
 };
 
 const removeInactiveCanvas = () => {
@@ -136,23 +139,19 @@ const addCanvasToActiveCanvasesArray = (socket, roomID, ctx) => {
 //listening to port connections
 io.on("connection", (socket) => {
   addUserToOnlineUsersArray(socket);
+  reportLog();
 
   //listening on port disconnection
   socket.on("disconnect", (reason) => {
     removeDisconnectedUserFromOnlineUsersArray(socket.id);
-    //removeUserFromConnectedArray(socket, oldRoom);
+    removeUserFromConnectedArray(socket);
+    reportLog();
     console.log(socket.id, ": disconnection X (", reason, ")");
   });
 
   //connecting user's name to socket ID
   socket.on("getUserInfo", (userFullName) => {
     socket.data.userFullName = userFullName;
-    console.log(
-      "id: ",
-      socket.id,
-      " name connected:",
-      socket.data.userFullName
-    );
   });
 
   //return bool for if roomID exists
@@ -178,8 +177,6 @@ io.on("connection", (socket) => {
   socket.on("send-end", (canvasID, canvasCurrent) => {
     if (canvasID) io.to(canvasID).emit("receive-end");
     else io.to(socket.id).emit("receive-end");
-
-    reportLog();
 
     //update canvas after every line draw
     saveCurrentCanvas(canvasID, canvasCurrent);
@@ -219,6 +216,7 @@ io.on("connection", (socket) => {
       //console.log("canvasToJoin", canvasToJoin);
       updateConnectedToCanvasArray(socket, canvasToJoin);
       joinExistingRoom(socket, roomID);
+      reportLog();
     } else {
       console.log("room not found");
       failedJoinRoom();
@@ -229,6 +227,7 @@ io.on("connection", (socket) => {
   socket.on("create-room", (roomID, ctx) => {
     addCanvasToActiveCanvasesArray(socket, roomID, ctx);
     socket.join(roomID);
+    reportLog();
   });
 
   //send previous lines of a canvas
@@ -244,10 +243,8 @@ io.on("connection", (socket) => {
         "receive-canvas-data",
         indexOfActiveCanvases[0].ctx
       );
-      }
-     
-    });
- 
+    }
+  });
 
   socket.on("leave-room", (oldRoom) => {
     socket.leave(oldRoom);
@@ -260,8 +257,7 @@ io.on("connection", (socket) => {
       removeUserFromConnectedArray(socket, oldRoom);
     }
 
-    //TODO: remove disconnected users from activeCanvases
-    //also from the canvas connected list
+    reportLog();
   });
 
   socket.on("send-clear-canvas", (roomID) => {
