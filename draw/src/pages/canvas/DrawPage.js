@@ -209,7 +209,7 @@ function DrawPage() {
   return (
     <div className="App">
       <h1>Draw!</h1>
-      <h2>Hello {location.state.fullName}</h2>
+      <h2 style={{backgroundColor:"white",  fontFamily:"'Assistant', cursive"}}>Hello {location.state.fullName}</h2>
       <div className="draw-area">
         <Menu
           setLineColor={setLineColor}
@@ -260,6 +260,7 @@ function DrawPage() {
               borderTopColor: "white",
               borderBottomRightRadius: 25,
               marginRight: -2,
+              fontFamily: "'Assistant', cursive"
             }}
           >
             <ChatBox userInfo={location.state.fullName} />

@@ -18,7 +18,7 @@ function ConnectedUserList({ list }) {
     );
   }
   return (
-    <div style={{ display: "flex", flexDirection: "row" }}>{mapElements()}</div>
+    <div style={{ display: "flex", flexDirection: "row" , fontFamily: "'Assistant', cursive"}}>{mapElements()}</div>
   );
 }
 

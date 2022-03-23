@@ -27,6 +27,7 @@ function ChatWrite({ userInfo }) {
             borderTopStyle: "solid",
             borderTopWidth: 2,
             borderTopColor: "gray",
+            paddingLeft: "2%"
           }}
           type="text"
           placeholder="Write Something"

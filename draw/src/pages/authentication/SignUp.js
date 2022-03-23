@@ -41,7 +41,8 @@ export default function SignUp() {
       FirstName,
       LastName,
       Email,
-      Password
+      Password,
+      ConfirmPassword
     );
     console.log("returned value=" + s);
 
@@ -59,14 +60,15 @@ export default function SignUp() {
     }
   };
 
-  const AddUser = async (FirstName, LastName, Email, Password) => {
+  const AddUser = async (FirstName, LastName, Email, Password,ConfirmPassword) => {
     let returnedObj = null;
 
     let obj2Send = {
       First_Name: FirstName,
       Last_Name: LastName,
       Email: Email,
-      Pass: Password
+      Pass: Password,
+      ConfirmPass:ConfirmPassword
     };
 
     await fetch(url, {

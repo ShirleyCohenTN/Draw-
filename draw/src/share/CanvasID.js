@@ -4,15 +4,16 @@ function CanvasID(props) {
   if (props.ID == null) {
     return (
       <div>
-        <label onClick={props.generatePublicCanvasID}>Status: Private</label>
+        <label style={{cursor:"pointer"}} onClick={props.generatePublicCanvasID}>Status: Private</label>
       </div>
     );
   }
 
   return (
     <div>
-      <label onClick={props.turnCanvasPrivate}>Status: Public </label>
-      <label>Canvas ID: {props.ID}</label>
+      <label style={{cursor:"pointer"}} onClick={props.turnCanvasPrivate}>Status: Public </label>
+      <label style={{backgroundColor:"rgb(255, 255, 204)"
+}}>Canvas ID: {props.ID}</label>
     </div>
   );
 }
