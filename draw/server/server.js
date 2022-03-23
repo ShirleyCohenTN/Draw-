@@ -74,15 +74,19 @@ const updateConnectedToCanvasArray = (socket, canvasToJoin) => {
   });
 };
 
-const joinExistingRoom = (socket, roomID) => {
+const emitUpdatedConnectedList = (roomID) => {
   let updatedConnectedUsersList = activeCanvases.find(
     (canvas) => canvas.roomID === roomID
   ).connectedNames;
-  socket.join(roomID);
   io.in(roomID).emit(
     "update-list-of-connected-users",
     updatedConnectedUsersList
   );
+};
+
+const joinExistingRoom = (socket, roomID) => {
+  socket.join(roomID);
+  emitUpdatedConnectedList(roomID);
 };
 
 const failedJoinRoom = () => {
@@ -104,6 +108,7 @@ const removeUserFromConnectedArray = (socket) => {
     activeCanvases[inxOfCanvas].connected.splice(inxOfUser, 1);
     activeCanvases[inxOfCanvas].connectedNames.splice(inxOfUser, 1);
     console.log(activeCanvases[inxOfCanvas].connected);
+    emitUpdatedConnectedList(activeCanvases[inxOfCanvas].roomID);
     removeInactiveCanvas();
   } else {
   }
@@ -145,6 +150,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", (reason) => {
     removeDisconnectedUserFromOnlineUsersArray(socket.id);
     removeUserFromConnectedArray(socket);
+
     reportLog();
     console.log(socket.id, ": disconnection X (", reason, ")");
   });
@@ -255,6 +261,11 @@ io.on("connection", (socket) => {
 
     if (oldRoom != null) {
       removeUserFromConnectedArray(socket, oldRoom);
+      if (roomExist(oldRoom)) {
+        emitUpdatedConnectedList(oldRoom);
+      }
+
+      io.to(socket.id).emit("update-list-of-connected-users", []);
     }
 
     reportLog();
