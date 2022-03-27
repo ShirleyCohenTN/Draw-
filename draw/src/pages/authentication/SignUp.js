@@ -60,15 +60,14 @@ export default function SignUp() {
     }
   };
 
-  const AddUser = async (FirstName, LastName, Email, Password,ConfirmPassword) => {
+  const AddUser = async (FirstName, LastName, Email, Password) => {
     let returnedObj = null;
 
     let obj2Send = {
       First_Name: FirstName,
       Last_Name: LastName,
       Email: Email,
-      Pass: Password,
-      ConfirmPass:ConfirmPassword
+      Pass: Password
     };
 
     await fetch(url, {
