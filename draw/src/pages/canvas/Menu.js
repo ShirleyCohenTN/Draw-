@@ -26,7 +26,7 @@ const Menu = ({
 }) => {
   const [newCanvasID, setNewCanvasID] = useState(0);
 
-  const test = "tktkt";
+  
   const navigate = useNavigate();
 
   // const clearCanvas = () => {
@@ -54,7 +54,7 @@ const Menu = ({
 
     //here we create a new one
     if (Canvas_ID === undefined) {
-      let s = await AddNewCanvas(UserID, canvasAsString, test);
+      let s = await AddNewCanvas(UserID, canvasAsString);
       console.log("returned value=" + s);
 
       setNewCanvasID(s.Canvas_ID);
@@ -76,8 +76,7 @@ const Menu = ({
 
       let obj2Send = {
         "Canvas_ID": `${Canvas_ID}`,
-        "Canvas_Path": `${canvasAsString}`,
-        "Canvas_Coordinates": `${test}`
+        "Canvas_Path": `${canvasAsString}`
       };
 
       console.log("obj2Send =" , obj2Send);
@@ -106,13 +105,12 @@ const Menu = ({
     }
   };
 
-  const AddNewCanvas = async (UserID, canvasAsString, test) => {
+  const AddNewCanvas = async (UserID, canvasAsString) => {
     let returnedObj = null;
 
     let obj2Send = {
       User_ID: UserID,
-      Canvas_Path: canvasAsString,
-      Canvas_Coordinates: test,
+      Canvas_Path: canvasAsString
     };
 
     await fetch(url, {
@@ -142,61 +140,7 @@ const Menu = ({
     return returnedObj;
   };
 
-  //   let s = await AddNewCanvas(UserID, canvasAsString, test);
-  //   console.log("returned value=" + s);
 
-  //   setNewCanvasID(s.Canvas_ID);
-
-  //   console.log("canvas_id is =" + s.Canvas_ID);
-
-  //   if (s == null) {
-  //     alert("הקאנבס לא נשמר");
-  //   } else {
-  //     alert("הקאנבס נשמר בהצלחה!");
-
-  //     //navigate('/', {state: {userID : s.User_ID, fullName: s.First_Name + " " + s.Last_Name}})
-  //   }
-  // };
-
-  // const AddNewCanvas = async (UserID, canvasAsString, test) => {
-  //   let returnedObj = null;
-
-  //   let obj2Send = {
-  //     User_ID: UserID,
-  //     Canvas_Path: canvasAsString,
-  //     Canvas_Coordinates: test,
-  //   };
-
-  //   await fetch(url, {
-  //     method: "POST", // 'GET', 'POST', 'PUT', 'DELETE', etc.
-  //     body: JSON.stringify(obj2Send),
-  //     headers: new Headers({
-  //       "Content-Type": "application/json",
-  //       Accept: "application/json",
-  //     }),
-  //   }) // Call the fetch function passing the url of the API as a parameter
-  //     .then((resp) => resp.json()) // Transform the data into json
-  //     .then(function (data) {
-  //       console.log(data);
-  //       if (!data.toString().includes("could not insert")) {
-  //         // console.log(data.email);
-  //         // console.log(data.pass);
-  //         returnedObj = data;
-  //       } else {
-  //         console.log("didnt inserted!");
-  //         returnedObj = null;
-  //       }
-  //     })
-  //     .catch(function (err) {
-  //       alert(err);
-  //     });
-
-  //   return returnedObj;
-  // };
-
-  const saveMyCanvas = () => {
-    console.log("the string is: ", canvasAsString);
-  };
 
   const btnGoToMyCanvases = (UserID) => {
     console.log("my id is: ", UserID);

@@ -103,9 +103,9 @@ function MyCanvases() {
 
 
 //duplicate canvas
-  const btnDuplicate = async (User_ID, Canvas_Path, Canvas_Coordinates) => {
+  const btnDuplicate = async (User_ID, Canvas_Path) => {
     console.log("we are in btnDuplicate")
-    let s = await AddNewCanvas(User_ID, Canvas_Path, Canvas_Coordinates);
+    let s = await AddNewCanvas(User_ID, Canvas_Path);
     console.log("returned value=" + s);
 
     setNewCanvasID(s.Canvas_ID);
@@ -121,13 +121,12 @@ function MyCanvases() {
     }
   };
 
-  const AddNewCanvas = async (User_ID, Canvas_Path, Canvas_Coordinates) => {
+  const AddNewCanvas = async (User_ID, Canvas_Path) => {
     let returnedObj = null;
 
     let obj2Send = {
       User_ID: User_ID,
-      Canvas_Path: Canvas_Path,
-      Canvas_Coordinates: Canvas_Coordinates,
+      Canvas_Path: Canvas_Path
     };
 
     await fetch(urlToUpload, {
@@ -159,10 +158,10 @@ function MyCanvases() {
 
 
 
-const btnEdit = (Canvas_ID, User_ID, Canvas_Path, Canvas_Coordinates) => {
+const btnEdit = (Canvas_ID, User_ID, Canvas_Path) => {
     console.log("we are in btnEdit, canvas id = ", Canvas_ID, " name =", location.state.fullName);
      navigate('/editcanvases', {state: {
-        Canvas_ID, userID: User_ID, Canvas_Path, Canvas_Coordinates, fullName: location.state.fullName }})
+        Canvas_ID, userID: User_ID, Canvas_Path: Canvas_Path, fullName: location.state.fullName }})
 
 }
 
@@ -180,7 +179,7 @@ const btnEdit = (Canvas_ID, User_ID, Canvas_Path, Canvas_Coordinates) => {
 
               <div style={{ display: "block" }}>
                 <button className="button-71 editing"
-                onClick={() => btnEdit(item.Canvas_ID ,item.User_ID, item.Canvas_Path, item.Canvas_Coordinates)}>
+                onClick={() => btnEdit(item.Canvas_ID ,item.User_ID, item.Canvas_Path)}>
                   Edit
                   {/* <img style={{width:"30%", display:"inline-block"}} src={require('../../images/delete.png')} /> */}
                 </button>
@@ -194,7 +193,7 @@ const btnEdit = (Canvas_ID, User_ID, Canvas_Path, Canvas_Coordinates) => {
                 </button>
 
                 <button className="button-71 duplicating"
-                onClick={() => btnDuplicate(item.User_ID, item.Canvas_Path, item.Canvas_Coordinates)}>
+                onClick={() => btnDuplicate(item.User_ID, item.Canvas_Path)}>
                   Duplicate
                   {/* <img style={{width:"30%", display:"inline-block"}} src={require('../../images/delete.png')} /> */}
                 </button>

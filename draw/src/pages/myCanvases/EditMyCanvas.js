@@ -7,8 +7,7 @@ import Menu from "../canvas/Menu";
 import { useLocation } from "react-router-dom";
 import ConnectedUserIcon from "../../connectedUsers/ConnectedUserIcon";
 import ConnectedUserList from "../../connectedUsers/ConnectedUsersList";
-import {useNavigate} from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 
 function EditMyCanvas() {
   const socket = useContext(SocketContext);
@@ -23,7 +22,6 @@ function EditMyCanvas() {
   const [canvasAsString, setCanvasAsString] = useState("empty string");
   const [connectedUsers, setConnectedUsers] = useState([]);
   const [isCanvasPathDisplayed, setIsCanvasPathDisplayed] = useState(true);
-
 
   //used for working without DB user
   const fakeLocation = {
@@ -49,22 +47,17 @@ function EditMyCanvas() {
     ctxRef.current = ctx;
     setCanvasAsString(canvas.toDataURL());
 
+    // sending here the canvas_path image
+    if (isCanvasPathDisplayed) {
+      var img = new Image();
+      img.onload = () => {
+        ctxRef.current.drawImage(img, 0, 0);
+      };
 
-    
-// sending here the canvas_path image 
-if(isCanvasPathDisplayed)
-{
-    var img = new Image();
-    img.onload = () => {
-      ctxRef.current.drawImage(img, 0, 0);
-    };
- 
-     img.src =
-      location.state.Canvas_Path;
+      img.src = location.state.Canvas_Path;
 
       setIsCanvasPathDisplayed(false);
     }
-
 
     //added white background to the canvas, so when we download the canvas image it will not be transparent
     if (backgroundWhite === false) {
@@ -117,10 +110,10 @@ if(isCanvasPathDisplayed)
         ctxRef.current.drawImage(img, 0, 0);
       };
       img.src = ctx;
-    //   img.src =
-    //     "https://filmfare.wwmindia.com/content/2021/nov/rrr11638189129.jpg";
-    //    img.src =
-    //     location.state.Canvas_Path;
+      //   img.src =
+      //     "https://filmfare.wwmindia.com/content/2021/nov/rrr11638189129.jpg";
+      //    img.src =
+      //     location.state.Canvas_Path;
       setCtxToSave(ctx);
     });
 
@@ -225,8 +218,10 @@ if(isCanvasPathDisplayed)
   return (
     <div className="App">
       <h1>Draw! - Edit Your Canvas</h1>
-      <h2>
-        Hello User ID: {location.state.userID}, {location.state.fullName}
+      <h2
+        style={{ backgroundColor: "white", fontFamily: "'Assistant', cursive" }}
+      >
+        Hello {location.state.fullName}
       </h2>
       <div className="draw-area">
         <Menu
@@ -244,23 +239,46 @@ if(isCanvasPathDisplayed)
           UserID={location.state.userID}
           canvasAsString={canvasAsString}
           Canvas_ID={location.state.Canvas_ID}
-          
-
         />
         <canvas
           id="canvas"
           onMouseDown={startDrawing}
           onMouseUp={endDrawing}
+          onMouseLeave={endDrawing}
           onMouseMove={draw}
           ref={canvasRef}
           width={`1200px`}
           height={`620px`}
         />
-      </div>
-      <div>
+      
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "right",
+          justifySelf: "right",
+          marginLeft: "auto",
+          marginTop: 33,
+        }}
+      >
         <ConnectedUserList list={connectedUsers} />
-        <ConnectedUserIcon />
-        <ChatBox userInfo={location.state.fullName} />
+        <div
+          style={{
+            display: "flex",
+            width: "30%",
+            borderColor: "purple",
+            borderWidth: 2,
+            borderStyle: "solid",
+            padding: 10,
+            backgroundColor: "white",
+            borderTopColor: "white",
+            borderBottomRightRadius: 25,
+            marginRight: -2,
+            fontFamily: "'Assistant', cursive",
+          }}
+        >
+          <ChatBox userInfo={location.state.fullName} />
+          </div>
+        </div>
       </div>
     </div>
   );
