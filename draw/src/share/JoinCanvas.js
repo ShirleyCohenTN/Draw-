@@ -18,7 +18,7 @@ function JoinCanvas(props) {
     <div style={{justifyContent:'center'}}>
       <form onSubmit={handleSubmit} className="joinContainer">
  
-          <input style={{marginBottom:'10px',backgroundColor:'#55c959',marginRight:'5px'}} type="text" value={canvasToJoin} onChange={handleChange} />
+          <input style={{marginBottom:'26px',backgroundColor:'#55c959',marginRight:'5px'}} type="text" value={canvasToJoin} onChange={handleChange} />
     
         <input className="inpBtn"  type="submit" value="Join Canvas" />
       </form>

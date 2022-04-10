@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import '../../App.css';
-import {FaUserAlt} from "react-icons/fa";
-import {Link} from "react-router-dom";
+
 
 var url = "http://localhost:50434/api/users";
 
@@ -11,20 +10,18 @@ var url = "http://localhost:50434/api/users";
 export default function Login() {
     const [Email, setEmail] = useState("");
     const [Password, setPassword] = useState("");
-    const [errorDesignEmail,setErrorDesignEmail]=useState("1");
-    const [errorDesignPassword,setErrorDesignPass]=useState("2");
+    const [errorDesignEmail, setErrorDesignEmail] = useState("1");
+    const [errorDesignPassword, setErrorDesignPass] = useState("2");
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(Email!==null||Email!=="")
-        {
+        if (Email !== null || Email !== "") {
             setErrorDesignEmail("1")
         }
-        if(Password!==null||Password!=="")
-        {
+        if (Password !== null || Password !== "") {
             setErrorDesignPass("2")
         }
-      },[Email,Password]);
+    }, [Email, Password]);
 
     const btnLogin = async () => {
         console.log(1);
@@ -53,7 +50,7 @@ export default function Login() {
             let result = await fetch(url + `?email=${Email}&pass=${Password}`, {
                 method: "GET", // 'GET', 'POST', 'PUT', 'DELETE', etc.
                 headers: new Headers(
-                    {"Content-Type": "application/json", Accept: "application/json"}
+                    { "Content-Type": "application/json", Accept: "application/json" }
                 )
             });
             let resultData = result.json();
@@ -72,50 +69,47 @@ export default function Login() {
 
     };
 
-    const chkFields=()=>{
-        let flag=false
-        if(Email===null||Email==="")
-        {
-         setErrorDesignEmail("errorDesign")
-         flag=true;
+    const chkFields = () => {
+        let flag = false
+        if (Email === null || Email === "") {
+            setErrorDesignEmail("errorDesign")
+            flag = true;
         }
-        if(Password===null||Password==="")
-        {
-        setErrorDesignPass("errorDesign")
-        flag=true;
+        if (Password === null || Password === "") {
+            setErrorDesignPass("errorDesign")
+            flag = true;
         }
-        if(!flag)
-        {
-          btnLogin()
+        if (!flag) {
+            btnLogin()
         }
     }
 
-    return (    <div className="form-comp cfb">
-    <h1>Sign In!</h1>
-    <form className="sign-up-form cfb">
-      <label>
-        Email:
-        <br/>
-        <input id={errorDesignEmail} className="inputAuth" // value={this.state.EmailValue}
+    return (<div className="form-comp cfb">
+        <h1>Sign In!</h1>
+        <form className="sign-up-form cfb">
+            <label style={{ fontSize: '16px' }}>
+                Email:
+                <br />
+                <input id={errorDesignEmail} className="inputAuth" // value={this.state.EmailValue}
                     onChange={
                         (e) => setEmail(e.target.value)
                     }
                     type="text"
-                    placeholder="Email"/>      </label>
-      <label>
-        Password:
-        <br/>
-        <input  id={errorDesignPassword} className="inputAuth"// value={this.state.PasswordValue}
+                    placeholder="Email" />      </label>
+            <label style={{ fontSize: '16px' }}>
+                Password:
+                <br />
+                <input id={errorDesignPassword} className="inputAuth"// value={this.state.PasswordValue}
                     onChange={
                         (e) => setPassword(e.target.value)
                     }
                     type="password"
-                    placeholder="Password"/>
-      </label>
-      <br/>
-      <button type="button" onClick={chkFields} className="buttonAuth">
-        Sign In!
-      </button>
-    </form>
-  </div>);
+                    placeholder="Password" />
+            </label>
+            <br />
+            <button type="button" onClick={chkFields} className="buttonAuth">
+                Sign In!
+            </button>
+        </form>
+    </div>);
 }

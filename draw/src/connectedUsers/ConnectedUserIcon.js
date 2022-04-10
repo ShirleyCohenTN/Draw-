@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Icon from "@mdi/react";
-import { mdiPalette, mdiAccountTie } from "@mdi/js";
+import { mdiAccountTie } from "@mdi/js";
 
 function ConnectedUserIcon({ nameOfUser }) {
   const [randomColor, setRandomColor] = useState(null);

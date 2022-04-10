@@ -1,11 +1,10 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { useEffect, useRef, useState, useContext } from "react";
 import ChatBox from "../../chat/ChatBox";
 import { SocketContext } from "../../helpingComponents/socket";
 import "./css/DrawPage.css";
 import Menu from "./Menu";
 import { useLocation } from "react-router-dom";
-import ConnectedUserIcon from "../../connectedUsers/ConnectedUserIcon";
 import ConnectedUserList from "../../connectedUsers/ConnectedUsersList";
 
 function DrawPage() {

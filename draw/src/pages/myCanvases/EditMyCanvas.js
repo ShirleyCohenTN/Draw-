@@ -1,13 +1,11 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { useEffect, useRef, useState, useContext } from "react";
 import ChatBox from "../../chat/ChatBox";
 import { SocketContext } from "../../helpingComponents/socket";
 import "../canvas/css/DrawPage.css";
 import Menu from "../canvas/Menu";
 import { useLocation } from "react-router-dom";
-import ConnectedUserIcon from "../../connectedUsers/ConnectedUserIcon";
 import ConnectedUserList from "../../connectedUsers/ConnectedUsersList";
-import { useNavigate } from "react-router-dom";
 
 function EditMyCanvas() {
   const socket = useContext(SocketContext);
