@@ -12,7 +12,7 @@ function DrawPage() {
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [lineWidth, setLineWidth] = useState(5);
+  const [lineWidth, setLineWidth] = useState(0);
   const [ctxToSave, setCtxToSave] = useState(null);
   const [lineColor, setLineColor] = useState("black");
   const [canvasID, setCanvasID] = useState(null);
@@ -225,6 +225,7 @@ function DrawPage() {
           UserID={location.state.userID}
           canvasAsString={canvasAsString}
           fullName={location.state.fullName}
+          lineWidth={lineWidth}
         />
         <canvas
           id="canvas"

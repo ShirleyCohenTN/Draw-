@@ -23,10 +23,11 @@ const Menu = ({
   sendClearCanvas,
   fullName,
   Canvas_ID,
+  lineWidth
 }) => {
   const [newCanvasID, setNewCanvasID] = useState(0);
 
-  
+
   const navigate = useNavigate();
 
   // const clearCanvas = () => {
@@ -68,9 +69,8 @@ const Menu = ({
 
         //navigate('/', {state: {userID : s.User_ID, fullName: s.First_Name + " " + s.Last_Name}})
       }
-    } 
-    else 
-    {
+    }
+    else {
       //here we UPDATE canvas that exists
       console.log("it not undefiend");
 
@@ -79,7 +79,7 @@ const Menu = ({
         "Canvas_Path": `${canvasAsString}`
       };
 
-      console.log("obj2Send =" , obj2Send);
+      console.log("obj2Send =", obj2Send);
 
       fetch(urlEdit, {
         method: "PUT", // 'GET', 'POST', 'PUT', 'DELETE', etc.
@@ -154,22 +154,29 @@ const Menu = ({
 
   return (
     <div className="Menu">
-    
+
       <input
         type="color"
         onChange={(e) => {
           setLineColor(e.target.value);
         }}
       />
-    
+
       <input
         type="range"
         min="3"
         max="20"
+        value={lineWidth}
         onChange={(e) => {
           setLineWidth(e.target.value);
         }}
       />
+
+      <div className="eraser"
+        onClick={() => setLineColor('white')} >
+        <div>Erase</div>
+      </div>
+
       <button onClick={sendClearCanvas}>Clear Canvas</button>
       <button onClick={downloadCanvas}>Save Image</button>
       <button onClick={btnSaveCanvas}>Save My Canvas</button>
