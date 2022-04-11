@@ -10,7 +10,6 @@ import * as Yup from 'yup';
 
 var url = "http://localhost:50434/api/users";
 
-//אני עדיין מקבלת שגיאת 400 בעת הרשמה אבל זה כן נרשם לי
 
 export default function SignUp() {
 

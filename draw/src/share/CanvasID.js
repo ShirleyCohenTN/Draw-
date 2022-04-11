@@ -12,7 +12,7 @@ function CanvasID(props) {
   return (
     <div>
       <label style={{cursor:"pointer",fontSize:'16px'}} onClick={props.turnCanvasPrivate}>Status: Public </label>
-      <label style={{backgroundColor:"rgb(255, 255, 204)"
+      <label style={{backgroundColor:"rgb(255, 255, 204)", fontSize:'14px'
 }}>Canvas ID: {props.ID}</label>
     </div>
   );

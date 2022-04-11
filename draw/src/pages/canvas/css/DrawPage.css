@@ -19,7 +19,7 @@ h1 {
 }
   
 .draw-area {
-  width: 1200px;
+  width: 1300px;
   height: 720px;
   border: 2px solid #a736f3;
   position: relative;
@@ -27,7 +27,7 @@ h1 {
 }
   
 .Menu {
-  width: 1200px;
+  width: 1300px;
   height: 60px;
   display: flex;
   justify-content: space-evenly;
